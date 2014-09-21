@@ -1,0 +1,39 @@
+[meta]
+# enviornment=prod for deployed instances
+environment=dev
+
+[dev]
+# Change this to the actual location of your site
+protocol=http
+domain=packages.knightos.org
+# Set to true to recompile resources on every request
+# Turn this off in production
+debug-static-recompile=true
+# Change this value to something random and secret
+secret-key=hello world
+
+# On the debug server, this lets you choose what to bind to
+debug-host=0.0.0.0
+debug-port=5000
+
+# To send emails, fill out these details
+smtp-host=
+smtp-port=
+smtp-user=
+smtp-password=
+# Exceptions are emailed here
+error-to=
+error-from=
+
+# SQL connection string
+connection-string=postgresql://postgres@localhost/knightos
+
+# Absolute path to the directory you want to store packages in
+storage=/home/sircmpwn/sources/packages.knightos.org/storage/
+
+# Configure these to determine who can send GitHub-style hook notifications to the site
+# to configure an automatic redeployment. Defaults to trusting GitHub and localhost.
+hook_ips = 204.232.175.64/27,192.30.252.0/22,127.0.0.1
+hook_repository=KnightOS/packages.knightos.org
+hook_branch=master
+restart_command=sudo systemctl restart packages.knightos.org
