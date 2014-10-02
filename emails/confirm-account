@@ -1,0 +1,7 @@
+An account, {{user.username}}, was registered with this email address on the KnightOS Package Index.
+
+To confirm this account, click this link:
+
+http://{{domain}}/confirm/{{confirmation}}
+
+Otherwise, just ignore the email.

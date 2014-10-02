@@ -10,3 +10,11 @@
 .navbar-text.text-danger {
     color: #A94442 !important;
 }
+
+.navbar-text {
+    a {
+        display: inline !important;
+        padding: 0 !important;
+        color: #428BCA !important;
+    }
+}

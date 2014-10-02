@@ -29,10 +29,17 @@
             </div>
             <div class="collapse navbar-collapse" id="navbar-collapse">
                 <p class="navbar-text text-danger">This website is a work in progress.</p>
+                {% if not user %}
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="/login">Log In</a></li>
                     <li><a href="/register">Register</a></li>
                 </ul>
+                {% else %}
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="/upload">Upload Package</a></li>
+                    <li class="navbar-text">Hello, {{ user.username }} &mdash; <a href="/logout">Log out</a></li>
+                </ul>
+                {% endif %}
             </div>
         </div>
     </nav>

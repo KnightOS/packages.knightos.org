@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+{% block body %}
+<h3>Log In</h3>
+<div class="container">
+    <div class="row">
+        {% if reset %}
+        <p>Your password has been reset. You can now log in.</p>
+        {% endif %}
+        <form class="form-horizontal col-md-6" role="form" action="/login" method="POST">
+            <div class="form-group">
+                <label for="username" class="col-sm-2 control-label">Username</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="username" placeholder="Username" name="username" value="{{ username }}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="password" class="col-sm-2 control-label">Password</label>
+                <div class="col-sm-10">
+                    <input type="password" class="form-control" id="password" placeholder="Password" name="password">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="checkbox">
+                    <label class="col-sm-10 col-sm-offset-2">
+                        <input type="checkbox" name="remember-me" id="remember-me">
+                        Remember Me
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-10 col-sm-offset-2">
+                    <input type="submit" value="Log In" class="btn btn-primary">
+                </div>
+            </div>
+            {% if return_to %}
+            <input type="hidden" name="return_to" value="{{ return_to }}">
+            {% endif %}
+        </form>
+        <div class="col-md-6">
+            {% if errors %}
+            <p class="text-danger">{{ errors }}</p>
+            {% endif %}
+            <a href="/forgot-password">Reset Password</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -19,6 +19,7 @@ import xml.etree.ElementTree as ET
 
 from packages.config import _cfg, _cfgi
 from packages.database import db, init_db
+from packages.objects import User
 from packages.common import *
 from packages.network import *
 
@@ -32,9 +33,9 @@ init_db()
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-#@login_manager.user_loader
-#def load_user(username):
-#    return User.query.filter(User.username == username).first()
+@login_manager.user_loader
+def load_user(username):
+    return User.query.filter(User.username == username).first()
 
 login_manager.anonymous_user = lambda: None
 
@@ -108,5 +109,6 @@ def inject():
         'any': any,
         'request': request,
         'locale': locale,
-        'url_for': url_for
+        'url_for': url_for,
+        'user': current_user
     }
