@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+{% block body %}
+<div class="row">
+    <div class="col-md-8">
+        <h2>KnightOS Package Index</h2>
+        <p>Welcome to the KnightOS package index! This is the source for both official packages and community
+        packages for KnightOS. To get started using new software, just search for packages, download
+        them, and install them on your calculator.<sup><a href="/help">(help)</a></sup> To submit new software,
+        you can <a href="/register">create an account</a> to get started.</p>
+        <h3>Index Discussion</h3>
+        <p>Questions and comments about the index are taken in <a href="#">#knightos on irc.freenode.net</a>
+        <sup><a href="#">(irc://)</a></sup>. Deletion requests, merge requests, transfer of orphaned packages,
+        and so on is all handled through here. Additionally, bugs can be reported and patches submitted at the
+        <a href="https://github.com/KnightOS/packages.knightos.org">GitHub repository</a>. This is only for
+        bugs and discussion related to this website. Bugs and comments for the packages hosted here should
+        be reported to the package maintainers upstream.</p>
+        <h3>Disclaimer</h3>
+        <p>All software that isn't in <em>core</em> is not supported by the KnightOS team, and you install it
+        at your own risk. This package index is provided without any kind of warranty whatsoever. Each package
+        is distributed under the terms of its own license.</p>
+    </div>
+    <div class="col-md-4">
+        <form role="search" method="GET" action="/search" class="row">
+            <div class="col-md-8">
+                <div class="form-group">
+                    <input type="text" class="form-control input-block-level" placeholder="Search packages">
+                </div>
+            </div>
+            <div class="col-md-4">
+                <button type="submit" class="btn btn-default btn-block">Submit</button>
+            </div>
+        </form>
+        <h4>Recently Updated</h4>
+        <div class="well well-sm">
+            <ul class="nav nav-stacked nav-pills nav-thin">
+            {% for i in range(1, 10) %}
+                <li><a href="#">core/init &mdash; Updated 2014-10-02</a></li>
+            {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

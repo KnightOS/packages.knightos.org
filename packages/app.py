@@ -23,6 +23,7 @@ from packages.common import *
 from packages.network import *
 
 from packages.blueprints.api import api
+from packages.blueprints.html import html
 
 app = Flask(__name__)
 app.secret_key = _cfg("secret-key")
@@ -38,6 +39,7 @@ login_manager.init_app(app)
 login_manager.anonymous_user = lambda: None
 
 app.register_blueprint(api)
+app.register_blueprint(html)
 
 locale.setlocale(locale.LC_ALL, 'en_US')
 
@@ -100,9 +102,6 @@ def hook_publish():
 @app.context_processor
 def inject():
     return {
-        'mobile': g.mobile,
-        'dnt': g.do_not_track,
-        'ads': ads,
         'root': _cfg("protocol") + "://" + _cfg("domain"),
         'domain': _cfg("domain"),
         'len': len,
