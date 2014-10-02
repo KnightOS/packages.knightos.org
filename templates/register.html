@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+{% block body %}
+<h2>Register an Account</h2>
+<p>You must register an account to submit new packages.</p>
+<div class="row">
+    <form role="form" method="POST" action="/register" class="col-md-4">
+        <div class="form-group {% if 'email' in errors %}has-error{% endif %}">
+            <label for="email"> Email Address
+            {% if 'email' in errors %}
+            &mdash; <span class="text-danger">{{ errors['email'] }}</span>
+            {% endif %}
+            </label>
+            <input type="email" class="form-control" id="email" name="email" placeholder="john@example.com">
+        </div>
+        <div class="form-group {% if 'username' in errors %}has-error{% endif %}">
+            <label for="username">Username
+            {% if 'username' in errors %}
+            &mdash; <span class="text-danger">{{ errors['username'] }}</span>
+            {% endif %}
+            </label>
+            <input type="text" class="form-control" id="username" name="username" placeholder="john">
+        </div>
+        <div class="form-group {% if 'password' in errors %}has-error{% endif %}">
+            <label for="password">Password
+            {% if 'password' in errors %}
+            &mdash; <span class="text-danger">{{ errors['password'] }}</span>
+            {% endif %}
+            </label>
+            <input type="password" class="form-control" id="password" name="password">
+        </div>
+        <div class="row">
+            <div class="col-md-4 col-md-offset-8">
+                <input type="submit" value="Register" class="btn btn-default btn-block">
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}

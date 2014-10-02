@@ -15,6 +15,10 @@ html = Blueprint('html', __name__, template_folder='../../templates')
 def index():
     return render_template("index.html")
 
+@html.route("/register")
+def register():
+    return render_template("register.html", errors={'email': 'This email is already registered.'})
+
 @html.route("/help")
 def help():
     return render_template("help.html")
