@@ -14,3 +14,7 @@ html = Blueprint('html', __name__, template_folder='../../templates')
 @html.route("/")
 def index():
     return render_template("index.html")
+
+@html.route("/help")
+def help():
+    return render_template("help.html")
