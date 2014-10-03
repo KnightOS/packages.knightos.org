@@ -1,4 +1,6 @@
-An account, {{user.username}}, was registered with this email address on the KnightOS Package Index.
+Hi {{user.username}},
+
+An account was registered with this email address on the KnightOS Package Index.
 
 To confirm this account, click this link:
 
