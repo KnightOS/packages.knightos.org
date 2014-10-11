@@ -55,6 +55,7 @@ class Package(Base):
     created = Column(DateTime)
     user_id = Column(Integer, ForeignKey('user.id'))
     user = relationship('User', backref=backref('package', order_by=id))
+    approved = Column(Boolean)
     # From package metadata
     name = Column(String(128), nullable = False)
     repo = Column(String(128), nullable = False)
@@ -70,6 +71,7 @@ class Package(Base):
     def __init__(self):
         self.created = datetime.now()
         self.updated = datetime.now()
+        self.approved = False
 
     def __repr__(self):
         return '{0}/{1}'.format(repo, name)
