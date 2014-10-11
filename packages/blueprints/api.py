@@ -11,7 +11,17 @@ import urllib
 
 api = Blueprint('api', __name__)
 
-@api.route("/test")
+@api.route("/api/v1/login", methods=['POST'])
 @json_output
-def test():
-    return { 'value': 'Hello world!' }
+def login():
+    username = request.form['username']
+    password = request.form['password']
+    user = User.query.filter(User.username.ilike(username)).first()
+    if not user:
+        return { 'success': False, 'error': 'Your username or password is incorrect.' }
+    if user.confirmation != '' and user.confirmation != None:
+        return { 'success': False, 'error': 'Your account is pending. Check your email or contact support@knightos.org' }
+    if not bcrypt.checkpw(password, user.password):
+        return { 'success': False, 'error': 'Your username or password is incorrect.' }
+    login_user(user)
+    return { 'success': True }
