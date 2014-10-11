@@ -20,7 +20,7 @@ html = Blueprint('html', __name__, template_folder='../../templates')
 
 @html.route("/")
 def index():
-    recent = Package.query.order_by(Package.updated).limit(10).all()
+    recent = Package.query.order_by(desc(Package.updated)).limit(10).all()
     return render_template("index.html", recent=recent)
 
 @html.route("/register", methods=['GET', 'POST'])
