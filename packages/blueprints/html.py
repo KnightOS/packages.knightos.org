@@ -111,6 +111,7 @@ def pending():
     return render_template("pending.html")
 
 @html.route("/upload", methods=['GET', 'POST'])
+@loginrequired
 def upload():
     if request.method == 'GET':
         return render_template("upload.html")
@@ -121,6 +122,20 @@ def upload():
             return render_template("upload.html", error=j['error'])
         else:
             return redirect(j['url'])
+
+@html.route("/<repo>/<name>")
+def package(repo, name):
+    p = Package.query.filter(Package.name == name and Package.repo == repo).first()
+    if not p:
+        abort(404)
+    return render_template("package.html", package=p)
+
+@html.route("/<repo>/<name>/download")
+def download(repo, name):
+    p = Package.query.filter(Package.name == name and Package.repo == repo).first()
+    if not p:
+        abort(404)
+    return send_file(os.path.join(_cfg("storage"), p.repo, "{0}-{1}.pkg".format(p.name, p.version)))
 
 @html.route("/guidelines")
 def guidelines():

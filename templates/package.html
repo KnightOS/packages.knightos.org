@@ -1,0 +1,55 @@
+{% extends "layout.html" %}
+{% block body %}
+<div class="pull-right" style="margin-top: 15px;">
+    <a href="/{{ package.repo }}/{{ package.name }}/download" class="btn btn-success">Download Package</a>
+</div>
+<h2><small>{{ package.repo }}/</small>{{ package.name }} {{ package.version }}</h2>
+<table class="table">
+    <tbody>
+        {% if package.description %}
+        <tr>
+            <th>Description</th>
+            <td>{{ package.description }}</td>
+        </tr>
+        {% endif %}
+        <tr>
+            <th>Version</th>
+            <td>{{ package.version }}</td>
+        </tr>
+        <tr>
+            <th>Repository</th>
+            <td>{{ package.repo }}</td>
+        </tr>
+        {% if package.copyright %}
+        <tr>
+            <th>Copyright</th>
+            <td>{{ package.copyright }}</td>
+        </tr>
+        {% endif %}
+        {% if package.author %}
+        <tr>
+            <th>Author</th>
+            <td>{{ package.author }}</td>
+        </tr>
+        {% endif %}
+        {% if package.maintainer %}
+        <tr>
+            <th>Maintainer</th>
+            <td>{{ package.maintainer }}</td>
+        </tr>
+        {% endif %}
+        {% if package.capabilities %}
+        <tr>
+            <th>Required Capabilities</th>
+            <td>{{ package.capabilities }}</td>
+        </tr>
+        {% endif %}
+        {% if package.infourl %}
+        <tr>
+            <th>Info URL</th>
+            <td><a href="{{ package.infourl }}">{{ package.infourl }}</a></td>
+        </tr>
+        {% endif %}
+    </tbody>
+</table>
+{% endblock %}
