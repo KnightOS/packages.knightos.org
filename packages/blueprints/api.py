@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, abort, request, redirect, session, url_for
 from flask.ext.login import current_user, login_user
 from sqlalchemy import desc
+from shutil import move
 from packages.objects import *
 from packages.common import *
 from packages.config import _cfg
@@ -78,6 +79,11 @@ def upload_package():
         except:
             return { 'success': False, 'error': '{0} is not a known dependency. Did you upload it first?'.format(dep) }, 400
     package.approved = False
+    storage_dir = os.path.join(_cfg("storage"), package.repo)
+    if not os.path.exists(storage_dir):
+        os.makedirs(storage_dir)
+    final_path = os.path.join(storage_dir, "{0}-{1}.pkg".format(package.name, package.version))
+    move(path, final_path)
     if not existing:
         db.add(package)
     db.commit()

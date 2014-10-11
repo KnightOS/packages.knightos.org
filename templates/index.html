@@ -35,8 +35,8 @@
         <h4>Recently Updated</h4>
         <div class="well well-sm">
             <ul class="nav nav-stacked nav-pills nav-thin">
-            {% for i in range(1, 10) %}
-                <li><a href="#">core/init &mdash; Updated 2014-10-02</a></li>
+            {% for p in recent %}
+            <li><a href="{{ p.repo }}/{{ p.name }}">{{ p.repo }}/{{ p.name }} &mdash; Updated {{ p.updated.strftime("%G-%m-%d") }}</a></li>
             {% endfor %}
             </ul>
         </div>

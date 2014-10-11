@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, abort, request, redirect, session, url_for
+from flask import Blueprint, render_template, abort, request, redirect, session, url_for, send_file
 from flask.ext.login import current_user, login_user, logout_user
 from sqlalchemy import desc
 from packages.objects import *
@@ -20,7 +20,8 @@ html = Blueprint('html', __name__, template_folder='../../templates')
 
 @html.route("/")
 def index():
-    return render_template("index.html")
+    recent = Package.query.order_by(Package.updated).limit(10).all()
+    return render_template("index.html", recent=recent)
 
 @html.route("/register", methods=['GET', 'POST'])
 def register():
@@ -135,7 +136,7 @@ def download(repo, name):
     p = Package.query.filter(Package.name == name and Package.repo == repo).first()
     if not p:
         abort(404)
-    return send_file(os.path.join(_cfg("storage"), p.repo, "{0}-{1}.pkg".format(p.name, p.version)))
+    return send_file(os.path.join(_cfg("storage"), p.repo, "{0}-{1}.pkg".format(p.name, p.version)), as_attachment=True)
 
 @html.route("/guidelines")
 def guidelines():

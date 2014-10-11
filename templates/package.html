@@ -13,6 +13,10 @@
         </tr>
         {% endif %}
         <tr>
+            <th>Last Updated</th>
+            <td>{{ package.updated.strftime("%G-%m-%d") }}</td>
+        </tr>
+        <tr>
             <th>Version</th>
             <td>{{ package.version }}</td>
         </tr>
