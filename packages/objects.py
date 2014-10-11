@@ -51,6 +51,7 @@ class Package(Base):
     __tablename__ = 'package'
     # packages.knightos.org data
     id = Column(Integer, primary_key = True)
+    updated = Column(DateTime)
     created = Column(DateTime)
     user_id = Column(Integer, ForeignKey('user.id'))
     user = relationship('User', backref=backref('package', order_by=id))
@@ -68,6 +69,7 @@ class Package(Base):
 
     def __init__(self):
         self.created = datetime.now()
+        self.updated = datetime.now()
 
     def __repr__(self):
         return '{0}/{1}'.format(repo, name)
