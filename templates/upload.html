@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+{% block scripts %}
+<script src="/static/upload.js"></script>
+{% endblock %}
+{% block body %}
+<p>Your package should meet our <a href="/guidelines">packaging guidelines</a> and will be reviewed before
+it appears in the public listing.</p>
+<form role="form" method="POST" action="/upload" enctype="multipart/form-data">
+    {% if error %}
+    <div class="alert alert-danger">
+        {{ error }}
+    </div>
+    {% endif %}
+    <input type="file" name="package" style="margin-bottom: 20px;" />
+    <input type="submit" class="btn btn-primary" id="upload" value="Upload" />
+</form>
+{% endblock %}

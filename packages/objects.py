@@ -74,4 +74,4 @@ class Package(Base):
         self.approved = False
 
     def __repr__(self):
-        return '{0}/{1}'.format(repo, name)
+        return '{0}/{1}'.format(self.repo, self.name)

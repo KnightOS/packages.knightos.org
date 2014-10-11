@@ -10,6 +10,7 @@ import os
 import zipfile
 import urllib
 import tempfile
+import datetime
 
 api = Blueprint('api', __name__)
 
@@ -30,12 +31,13 @@ def login():
 
 @api.route("/api/v1/upload", methods=['POST'])
 @json_output
+@loginrequired
 def upload_package():
     package_file = request.files.get('package')
-    path = None
-    with tempfile.mkstemp() as f, p:
-        package_file.save(f)
-        path = p
+    if not package_file:
+        return { 'success': False, 'error': 'You must include a package file.' }
+    f, path = tempfile.mkstemp()
+    package_file.save(path)
     info = None
     try:
         info = PackageInfo.read_package(path)
@@ -51,6 +53,7 @@ def upload_package():
         if existing.user.username != current_user.username:
             return { 'success': False, 'error': 'You do not have permission to update this {0}/{1}.'.format(info.repo, info.name) }, 403
         package = existing
+        package.updated = datetime.now()
     else:
         package.user = current_user
         package.name = info.name
@@ -71,9 +74,9 @@ def upload_package():
             if not db_dep:
                 raise Exception()
         except:
-            return { 'success': False, 'error': '{0} is not a known dependency. Did you upload it first?'.format(dep) }
+            return { 'success': False, 'error': '{0} is not a known dependency. Did you upload it first?'.format(dep) }, 400
     package.approved = False
     if not existing:
         db.add(package)
     db.commit()
-    return { 'success': True, 'url': '/{0}/{1}'.format(package.repo, package.name) }
+    return { 'success': True, 'url': '/{0}/{1}'.format(package.repo, package.name) }, 200

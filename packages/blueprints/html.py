@@ -5,13 +5,17 @@ from packages.objects import *
 from packages.common import *
 from packages.config import _cfg
 from packages.email import send_confirmation
+from packages.blueprints.api import upload_package
 
 import binascii
 import os
 import zipfile
 import urllib
 import re
+import json
+import locale
 
+encoding = locale.getdefaultlocale()[1]
 html = Blueprint('html', __name__, template_folder='../../templates')
 
 @html.route("/")
@@ -105,6 +109,22 @@ def logout():
 @html.route("/pending")
 def pending():
     return render_template("pending.html")
+
+@html.route("/upload", methods=['GET', 'POST'])
+def upload():
+    if request.method == 'GET':
+        return render_template("upload.html")
+    else:
+        result = upload_package()[0]
+        j = json.loads(result.data.decode(encoding))
+        if not j['success']:
+            return render_template("upload.html", error=j['error'])
+        else:
+            return redirect(j['url'])
+
+@html.route("/guidelines")
+def guidelines():
+    return render_template("guidelines.html")
 
 @html.route("/help")
 def help():
