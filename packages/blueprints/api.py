@@ -51,7 +51,7 @@ def upload_package():
     except:
         return { 'success': False, 'error': 'This is not a valid KnightOS package.' }, 400
     package = Package()
-    existing = Package.query.filter(Package.repo == info.repo and Package.name == info.name).first()
+    existing = Package.query.filter(Package.repo == info.repo).filter(Package.name == info.name).first()
     if existing:
         if existing.user.username != current_user.username:
             return { 'success': False, 'error': 'You do not have permission to update this {0}/{1}.'.format(info.repo, info.name) }, 403

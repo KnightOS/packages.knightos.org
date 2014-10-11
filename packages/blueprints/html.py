@@ -126,7 +126,7 @@ def upload():
 
 @html.route("/<repo>/<name>")
 def package(repo, name):
-    p = Package.query.filter(Package.name == name and Package.repo == repo).first()
+    p = Package.query.filter(Package.name == name).filter(Package.repo == repo).first()
     if not p:
         abort(404)
     return render_template("package.html", package=p)
