@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, abort, request, redirect, session, url_for, send_file
 from flask.ext.login import current_user, login_user, logout_user
-from sqlalchemy import desc
+from sqlalchemy import desc, or_, and_, desc
 from packages.objects import *
 from packages.common import *
 from packages.config import _cfg
@@ -14,6 +14,8 @@ import urllib
 import re
 import json
 import locale
+import shlex
+import math
 
 encoding = locale.getdefaultlocale()[1]
 html = Blueprint('html', __name__, template_folder='../../templates')
@@ -130,6 +132,31 @@ def package(repo, name):
     if not p:
         abort(404)
     return render_template("package.html", package=p)
+
+@html.route("/search")
+def search():
+    terms = request.args.get('terms')
+    page = 0
+    if not terms:
+        terms = ''
+    try:
+        page = request.form.get('page')
+        if not page:
+            page = '0'
+        page = int(page)
+    except:
+        abort(400)
+    split_terms = shlex.split(terms)
+    results = Package.query
+    filters = list()
+    for term in split_terms:
+        filters.append(Package.repo.ilike('%' + term + '%'))
+        filters.append(Package.name.ilike('%' + term + '%'))
+        filters.append(Package.description.ilike('%' + term + '%'))
+    results = results.filter(or_(*filters))
+    total = math.ceil(results.count() / 50)
+    results = results.all()[page * 50:(page + 1) * 50]
+    return render_template("search.html", results=results, terms=terms)
 
 @html.route("/<repo>/<name>/download")
 def download(repo, name):

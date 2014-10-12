@@ -1,5 +1,6 @@
 {% extends "layout.html" %}
-{% block body %} <div class="row">
+{% block body %} 
+<div class="row">
     <div class="col-md-8">
         <h2>KnightOS Package Index</h2>
         <p>Welcome to the KnightOS package index! This is the source for both official packages and community
@@ -24,7 +25,7 @@
         <form role="search" method="GET" action="/search" class="row">
             <div class="col-md-8">
                 <div class="form-group">
-                    <input type="text" class="form-control input-block-level" placeholder="Search packages">
+                    <input type="text" name="terms" class="form-control input-block-level" placeholder="Search packages">
                 </div>
             </div>
             <div class="col-md-4">

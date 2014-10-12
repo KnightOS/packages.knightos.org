@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+{% block body %} 
+<form role="search" method="GET" action="/search" class="row">
+    <div class="col-md-10">
+        <div class="form-group">
+            <input type="text" name="terms" class="form-control input-block-level" placeholder="Search packages" value="{{ terms }}">
+        </div>
+    </div>
+    <div class="col-md-2">
+        <button type="submit" class="btn btn-default btn-block">Submit</button>
+    </div>
+</form>
+<table class="table">
+    <tbody>
+        {% for result in results %}
+        <tr>
+            <td><a href="/{{ result.repo }}/{{ result.name }}">{{ result.repo }}/{{ result.name }}</a></td>
+            <td>{{ result.version }}</td>
+            <td>{{ result.description }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
