@@ -7,7 +7,7 @@ import bcrypt
 
 package_dependencies = Table('package_dependencies', Base.metadata,
     Column('package_id', Integer, ForeignKey('package.id')),
-    Column('package_id', Integer, ForeignKey('package.id')),
+    Column('dependency_id', Integer, ForeignKey('package.id')),
 )
 
 class User(Base):
@@ -66,7 +66,11 @@ class Package(Base):
     infourl = Column(Unicode(1024))
     copyright = Column(Unicode(1024))
     capabilities = Column(Unicode(2048))
-    dependencies = relationship('Package', viewonly=True, secondary=package_dependencies, backref='package.id')
+    dependencies = relationship('Package', 
+        secondary=package_dependencies,
+        primaryjoin=id==package_dependencies.c.package_id,
+        secondaryjoin=id==package_dependencies.c.dependency_id,
+        backref='package.id')
 
     def __init__(self):
         self.created = datetime.now()

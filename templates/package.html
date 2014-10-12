@@ -12,6 +12,16 @@
             <td>{{ package.description }}</td>
         </tr>
         {% endif %}
+        {% if len(package.dependencies) != 0 %}
+        <tr>
+            <th>Dependencies</th>
+            <td>
+                {% for d in package.dependencies %}
+                <a href="/{{ d.repo }}/{{ d.name }}">{{ d.repo }}/{{ d.name }}</a><br />
+                {% endfor %}
+            </td>
+        </tr>
+        {% endif %}
         <tr>
             <th>Last Updated</th>
             <td>{{ package.updated.strftime("%G-%m-%d") }}</td>

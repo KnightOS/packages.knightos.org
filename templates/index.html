@@ -36,7 +36,7 @@
         <div class="well well-sm">
             <ul class="nav nav-stacked nav-pills nav-thin">
             {% for p in recent %}
-            <li><a href="{{ p.repo }}/{{ p.name }}">{{ p.repo }}/{{ p.name }} &mdash; Updated {{ p.updated.strftime("%G-%m-%d") }}</a></li>
+            <li><a href="/{{ p.repo }}/{{ p.name }}">{{ p.repo }}/{{ p.name }} &mdash; Updated {{ p.updated.strftime("%G-%m-%d") }}</a></li>
             {% endfor %}
             </ul>
         </div>

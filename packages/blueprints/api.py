@@ -51,10 +51,12 @@ def upload_package():
     except:
         return { 'success': False, 'error': 'This is not a valid KnightOS package.' }, 400
     package = Package()
-    existing = Package.query.filter(Package.repo == info.repo).filter(Package.name == info.name).first()
+    existing = Package.query.filter(Package.name == info.name).first()
     if existing:
+        if existing.repo != info.repo:
+            return { 'success': False, 'error': 'This name conflicts with {0}/{1}.'.format(existing.repo, existing.name) }, 403
         if existing.user.username != current_user.username:
-            return { 'success': False, 'error': 'You do not have permission to update this {0}/{1}.'.format(info.repo, info.name) }, 403
+            return { 'success': False, 'error': 'You do not have permission to update {0}/{1}.'.format(existing.repo, existing.name) }, 403
         package = existing
         package.updated = datetime.now()
     else:
@@ -73,9 +75,11 @@ def upload_package():
         try:
             repo = dep.split('/')[0]
             name = dep.split('/')[1]
-            db_dep = Package.query.filter(Package.repo == repo and Package.name == name).first()
+            db_dep = Package.query.filter(Package.repo == repo).filter(Package.name == name).first()
             if not db_dep:
                 raise Exception()
+            package.dependencies.append(db_dep)
+            print('appended ' + db_dep.name)
         except:
             return { 'success': False, 'error': '{0} is not a known dependency. Did you upload it first?'.format(dep) }, 400
     package.approved = False
