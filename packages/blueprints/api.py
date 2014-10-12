@@ -30,6 +30,28 @@ def login():
     login_user(user)
     return { 'success': True }
 
+@api.route("/api/v1/<repo>/<name>")
+@json_output
+def get_info(repo, name):
+    package = Package.query.filter(Package.name == name).filter(Package.repo == repo).first()
+    if not package:
+        return { 'success': False, 'error': 'Package not found.' }, 404
+    json = {
+        'name': package.name,
+        'repo': package.repo,
+        'full_name': '{0}/{1}'.format(package.repo, package.name),
+        'version': package.version,
+        'author': package.author,
+        'maintainer': package.maintainer,
+        'infourl': package.infourl,
+        'copyright': package.copyright,
+        'capabilities': package.capabilities,
+        'dependencies': list()
+    }
+    for d in package.dependencies:
+        json['dependencies'].append('{0}/{1}'.format(d.repo, d.name))
+    return json
+
 @api.route("/api/v1/upload", methods=['POST'])
 @json_output
 @loginrequired
