@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+{% block body %}
+<p>All packages must follow a set of basic rules:</p>
+<ul>
+    <li>Use the appropriate package repository (see below)</li>
+    <li>Declare dependencies with full names (i.e. "core/configlib" instead of "configlib")</li>
+    <li>Libraries should place include files or headers in <code>include/</code>. These won't be sent to the calculator under normal circumstances, but will be used by the SDK.</li>
+    <li>Libraries must not use a library ID that's already in use by another package.</li>
+    <li>All packages implicitly grant packages.knightos.org a worldwide, non-revokable license to distribute that package.</li>
+</ul>
+<h3>Package Repositories</h3>
+<p>We have a few repositories, each with their own purpose. Use the right one or your package will not be approved, or may be changed prior to approval:</p>
+<ul>
+    <li><strong>core</strong>: Core packages from the KnightOS team, essential for normal operation</li>
+    <li><strong>extra</strong>: Extra packages from the KnightOS team, non-essential for normal operation</li>
+    <li><strong>community</strong>: Packages from the community at large</li>
+    <li><strong>ports</strong>: Packages ported from TIOS or other operating systems</li>
+</ul>
+{% endblock %}
