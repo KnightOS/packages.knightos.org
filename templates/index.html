@@ -1,6 +1,5 @@
 {% extends "layout.html" %}
-{% block body %}
-<div class="row">
+{% block body %} <div class="row">
     <div class="col-md-8">
         <h2>KnightOS Package Index</h2>
         <p>Welcome to the KnightOS package index! This is the source for both official packages and community
@@ -34,11 +33,16 @@
         </form>
         <h4>Recently Updated</h4>
         <div class="well well-sm">
-            <ul class="nav nav-stacked nav-pills nav-thin">
-            {% for p in recent %}
-            <li><a href="/{{ p.repo }}/{{ p.name }}">{{ p.repo }}/{{ p.name }} &mdash; Updated {{ p.updated.strftime("%G-%m-%d") }}</a></li>
-            {% endfor %}
-            </ul>
+            <table style="width: 100%">
+                <tbody>
+                    {% for p in recent %}
+                    <tr>
+                        <td><a href="/{{ p.repo }}/{{ p.name }}">{{ p.repo }}/{{ p.name }}</a></td>
+                        <td style="text-align: right">{{ p.updated.strftime("%G-%m-%d") }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
