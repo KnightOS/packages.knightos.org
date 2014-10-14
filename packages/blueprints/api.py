@@ -77,7 +77,7 @@ def upload_package():
     if existing:
         if existing.repo != info.repo:
             return { 'success': False, 'error': 'This name conflicts with {0}/{1}.'.format(existing.repo, existing.name) }, 403
-        if existing.user.username != current_user.username:
+        if existing.user.username != current_user.username and not current_user.admin:
             return { 'success': False, 'error': 'You do not have permission to update {0}/{1}.'.format(existing.repo, existing.name) }, 403
         package = existing
         package.updated = datetime.now()
