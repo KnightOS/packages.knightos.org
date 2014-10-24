@@ -1,15 +1,31 @@
 {% extends "layout.html" %}
+{% block scripts %}
+{% if user and user.admin %}
+<script type="text/javascript">
+document.getElementById("approval-button").addEventListener('click', function(e) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/api/v1/{{ package.repo }}/{{ package.name }}/approve');
+    xhr.onload = function() {
+        window.location = window.location;
+    };
+    xhr.send();
+}, false);
+</script>
+{% endif %}
+{% endblock %}
 {% block body %}
 <div class="pull-right" style="margin-top: 15px;">
     <a href="/{{ package.repo }}/{{ package.name }}/download" class="btn btn-success">Download Package</a>
 </div>
 <h2><small>{{ package.repo }}/</small>{{ package.name }} {{ package.version }}</h2>
+{% if not package.approved %}
 <div class="alert alert-warning">
-    {% if user.admin %}
-    <button class="btn btn-primary pull-right btn-sm" style="margin-top: -5px;">Approve</button>
+    {% if user and user.admin %}
+    <button class="btn btn-primary pull-right btn-sm" style="margin-top: -5px;" id="approval-button">Approve</button>
     {% endif %}
     <p>This package has not yet been approved. You install it at your own risk.</p>
 </div>
+{% endif %}
 <table class="table">
     <tbody>
         {% if package.description %}

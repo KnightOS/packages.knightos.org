@@ -53,6 +53,18 @@ def get_info(repo, name):
         json['dependencies'].append('{0}/{1}'.format(d.repo, d.name))
     return json
 
+@api.route("/api/v1/<repo>/<name>/approve", methods=["POST"])
+@json_output
+def approve_package(repo, name):
+    package = Package.query.filter(Package.name == name).filter(Package.repo == repo).first()
+    if not package:
+        return { 'success': False, 'error': 'Package not found.' }, 404
+    if not current_user or not current_user.admin:
+        return { 'success': False, 'error': 'You do not have permission to approve this package.' }, 403
+    package.approved = True
+    db.commit()
+    return { 'success': True }
+
 @api.route("/api/v1/upload", methods=['POST'])
 @json_output
 @loginrequired
