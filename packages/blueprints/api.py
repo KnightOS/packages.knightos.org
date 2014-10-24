@@ -7,6 +7,7 @@ from packages.objects import *
 from packages.common import *
 from packages.config import _cfg
 from packages.kpack import PackageInfo
+from packages.email import send_new_pacakge_email
 
 import os
 import zipfile
@@ -125,5 +126,6 @@ def upload_package():
     move(path, final_path)
     if not existing:
         db.add(package)
+        send_new_pacakge_email(package)
     db.commit()
     return { 'success': True, 'url': '/{0}/{1}'.format(package.repo, package.name) }, 200
