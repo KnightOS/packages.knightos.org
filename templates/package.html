@@ -4,6 +4,12 @@
     <a href="/{{ package.repo }}/{{ package.name }}/download" class="btn btn-success">Download Package</a>
 </div>
 <h2><small>{{ package.repo }}/</small>{{ package.name }} {{ package.version }}</h2>
+<div class="alert alert-warning">
+    {% if user.admin %}
+    <button class="btn btn-primary pull-right btn-sm" style="margin-top: -5px;">Approve</button>
+    {% endif %}
+    <p>This package has not yet been approved. You install it at your own risk.</p>
+</div>
 <table class="table">
     <tbody>
         {% if package.description %}

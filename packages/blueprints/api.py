@@ -46,7 +46,8 @@ def get_info(repo, name):
         'infourl': package.infourl,
         'copyright': package.copyright,
         'capabilities': package.capabilities,
-        'dependencies': list()
+        'dependencies': list(),
+        'approved': package.approved
     }
     for d in package.dependencies:
         json['dependencies'].append('{0}/{1}'.format(d.repo, d.name))

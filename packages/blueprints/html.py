@@ -22,8 +22,9 @@ html = Blueprint('html', __name__, template_folder='../../templates')
 
 @html.route("/")
 def index():
-    recent = Package.query.order_by(desc(Package.updated)).limit(10).all()
-    return render_template("index.html", recent=recent)
+    recent = Package.query.filter(Package.approved == True).order_by(desc(Package.updated)).limit(10).all()
+    queue = Package.query.filter(Package.approved == False).order_by(desc(Package.updated)).all()
+    return render_template("index.html", recent=recent, queue=queue)
 
 @html.route("/register", methods=['GET', 'POST'])
 def register():
@@ -154,6 +155,7 @@ def search():
         filters.append(Package.name.ilike('%' + term + '%'))
         filters.append(Package.description.ilike('%' + term + '%'))
     results = results.filter(or_(*filters))
+    results = results.filter(Package.approved == True)
     total = math.ceil(results.count() / 50)
     results = results.all()[page * 50:(page + 1) * 50]
     return render_template("search.html", results=results, terms=terms)

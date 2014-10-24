@@ -42,9 +42,30 @@
                         <td style="text-align: right">{{ p.updated.strftime("%G-%m-%d") }}</td>
                     </tr>
                     {% endfor %}
+                    {% if len(recent) == 0 %}
+                    <p><em>(none)</em></p>
+                    {% endif %}
                 </tbody>
             </table>
         </div>
+        {% if user and user.admin %}
+        <h4>Approval Queue</h4>
+        <div class="well well-sm">
+            <table style="width: 100%">
+                <tbody>
+                    {% for p in queue %}
+                    <tr>
+                        <td><a href="/{{ p.repo }}/{{ p.name }}">{{ p.repo }}/{{ p.name }}</a></td>
+                        <td style="text-align: right">{{ p.updated.strftime("%G-%m-%d") }}</td>
+                    </tr>
+                    {% endfor %}
+                    {% if len(queue) == 0 %}
+                    <p><em>(none)</em></p>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
     </div>
 </div>
 {% endblock %}
