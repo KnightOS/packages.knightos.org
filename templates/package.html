@@ -13,6 +13,9 @@ document.getElementById("approval-button").addEventListener('click', function(e)
 </script>
 {% endif %}
 {% endblock %}
+{% block title %}
+<title>{{ package.repo }}/{{ package.name }} {{ package.version }}</title>
+{% endblock %}
 {% block body %}
 <div class="pull-right" style="margin-top: 15px;">
     <a href="/{{ package.repo }}/{{ package.name }}/download" class="btn btn-success">Download Package</a>
