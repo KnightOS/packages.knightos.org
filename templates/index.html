@@ -38,7 +38,7 @@
                 <tbody>
                     {% for p in recent %}
                     <tr>
-                        <td><a href="/{{ p.repo }}/{{ p.name }}">{{ p.repo }}/{{ p.name }}</a></td>
+                        <td><a href="/{{ p.repo }}/{{ p.name }}">{{ p.repo }}/{{ p.name }}</a> {{ p.version }}</td>
                         <td style="text-align: right">{{ p.updated.strftime("%G-%m-%d") }}</td>
                     </tr>
                     {% endfor %}
