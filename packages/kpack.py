@@ -58,7 +58,9 @@ class PackageInfo():
         shutil.copyfile(path, fullTempPath)
         extractedDir = os.path.join(tempFolder, 'pkgroot/')
         subprocess.call(['kpack', '-e', path, extractedDir])
-        return PackageInfo.walkdir(extractedDir, 0)
+        packageContents = PackageInfo.walkdir(extractedDir, 0)
+        shutil.rmtree(tempFolder)
+        return packageContents
 
     @staticmethod
     def walkdir(dirname, level):
