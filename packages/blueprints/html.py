@@ -6,6 +6,7 @@ from packages.common import *
 from packages.config import _cfg
 from packages.email import send_confirmation
 from packages.blueprints.api import upload_package
+from packages.kpack import PackageInfo
 
 import binascii
 import os
@@ -130,9 +131,11 @@ def upload():
 @html.route("/<repo>/<name>")
 def package(repo, name):
     p = Package.query.filter(Package.name == name).filter(Package.repo == repo).first()
+    packagePath = os.path.join(_cfg("storage"), p.repo, "{0}-{1}.pkg".format(p.name, p.version))
+    packageContents = PackageInfo.get_package_contents(packagePath)
     if not p:
         abort(404)
-    return render_template("package.html", package=p)
+    return render_template("package.html", package=p, packageContents=packageContents)
 
 @html.route("/search")
 def search():

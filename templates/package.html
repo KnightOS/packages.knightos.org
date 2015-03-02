@@ -91,4 +91,17 @@ document.getElementById("approval-button").addEventListener('click', function(e)
         {% endif %}
     </tbody>
 </table>
+
+
+<div class="panel panel-default">
+    <div class="panel-body">
+    <b><u>Package Contents:</u></b>
+        <ul id="package-contents">
+            {% for listing in packageContents %}
+                <li>{{ listing }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
 {% endblock %}
