@@ -21,6 +21,7 @@ class PackageInfo():
         output = process.communicate()[0].decode(encoding)
         result = PackageInfo()
         for line in output.splitlines():
+            if not "=" in line: continue
             eq = line.index('=')
             key = line[:eq]
             value = line[eq + 1:]
