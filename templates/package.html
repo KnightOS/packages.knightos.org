@@ -100,12 +100,12 @@ document.getElementById("transfer-button").addEventListener('click', function(e)
         </tr>
         {% endif %}
         {% if package.user %}
-        <tr>
+        <tr class="inline-form">
             <th>Submitter</th>
             <td><a href="/user/{{ package.user.username }}">{{ package.user.username }}</a>
 {% if package.user == user or user.admin %}
-    <button class="btn btn-primary pull-right btn-sm" id="transfer-button">Transfer</button>
-    <input class="pull-right" type="text" id="transferUser" name="transferUser" value=""> 
+    <button style="position: relative; top: 2px; margin-left: 10px;" class="btn btn-primary pull-right btn-sm" id="transfer-button">Transfer package</button>
+    <input class="pull-right form-control" type="text" id="transferUser" name="transferUser" value="" /> 
 {% endif %}
             </td>
  
