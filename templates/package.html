@@ -21,6 +21,19 @@ document.getElementById("unapproval-button").addEventListener('click', function(
     xhr.send();
 }, false);
 </script>
+<script type="text/javascript">
+document.getElementById("removal-button").addEventListener('click', function(e) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/api/v1/{{ package.repo }}/{{ package.name }}/remove');
+    xhr.onload = function() {
+        window.location.replace("/");
+    };
+    if(confirm("Remove the package {{ package.repo }}/{{ package.name }} ?"))
+    {
+	xhr.send();
+    }
+}, false);
+</script>
 {% endif %}
 
 {% if package.user == user or user.admin %}
@@ -65,6 +78,12 @@ document.getElementById("transfer-button").addEventListener('click', function(e)
             <p>This package has already been approved.</p>
         </div>
     {% endif %}
+{% endif %}
+{% if user and user.admin %}
+    <div class="alert alert-danger">
+        <button class="btn btn-danger pull-right btn-sm" style="margin-top: -5px;" id="removal-button">Remove Package</button>
+        <p>This will permanently remove the package.</p>
+    </div>
 {% endif %}
 <table class="table form-inline">
     <tbody>

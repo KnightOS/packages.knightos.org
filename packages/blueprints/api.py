@@ -78,6 +78,20 @@ def unapprove_package(repo, name):
     db.commit()
     return { 'success': True }
 
+@api.route("/api/v1/<repo>/<name>/remove", methods=["POST"])
+@json_output
+def remove_package(repo, name):
+    package = Package.query.filter(Package.name == name).filter(Package.repo == repo).first()
+    if not package:
+        return { 'success': False, 'error': 'Package not found.' }, 404
+    if not current_user or not current_user.admin:
+        return { 'success': False, 'error': 'You do not have permission to remove this package.' }, 403
+    packagePath = os.path.join(_cfg("storage"), package.repo, "{0}-{1}.pkg".format(package.name, package.version))
+    os.remove(packagePath)
+    db.delete(package)
+    db.commit()
+    return { 'success': True }
+
 @api.route("/api/v1/transfer/<repo>/<name>/<username>", methods=["POST"])
 @json_output
 def transfer_package(repo, name, username):
