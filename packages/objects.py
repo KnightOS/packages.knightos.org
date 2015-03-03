@@ -56,6 +56,7 @@ class Package(Base):
     user_id = Column(Integer, ForeignKey('user.id'))
     user = relationship('User', backref=backref('package', order_by=id))
     approved = Column(Boolean)
+    contents = Column(Unicode(2048))
     # From package metadata
     name = Column(String(128), nullable = False)
     repo = Column(String(128), nullable = False)
