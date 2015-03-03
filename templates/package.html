@@ -51,7 +51,7 @@ document.getElementById("transfer-button").addEventListener('click', function(e)
     <p>This package has not yet been approved. You install it at your own risk.</p>
 </div>
 {% endif %}
-<table class="table">
+<table class="table form-inline">
     <tbody>
         {% if package.description %}
         <tr>
@@ -100,7 +100,7 @@ document.getElementById("transfer-button").addEventListener('click', function(e)
         </tr>
         {% endif %}
         {% if package.user %}
-        <tr class="inline-form">
+        <tr>
             <th>Submitter</th>
             <td><a href="/user/{{ package.user.username }}">{{ package.user.username }}</a>
 {% if package.user == user or user.admin %}
