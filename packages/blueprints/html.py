@@ -155,9 +155,9 @@ def user(username):
 @html.route("/search")
 def search():
     terms = request.args.get('terms')
-
     if not terms:
         terms = ''
+
     try:
         page = request.args.get('page')
         if not page:
@@ -169,10 +169,13 @@ def search():
     results = Package.query
     filters = list()
 
-    PAGE_SIZE = request.args.get('count')
-    if not PAGE_SIZE:
-        PAGE_SIZE = '10'
-    PAGE_SIZE = int(PAGE_SIZE)
+    try:
+        PAGE_SIZE = request.args.get('count')
+        if not PAGE_SIZE:
+            PAGE_SIZE = '10'
+        PAGE_SIZE = int(PAGE_SIZE)
+    except:
+        PAGE_SIZE = 10
 
     for term in split_terms:
         filters.append(Package.repo.ilike('%' + term + '%'))
