@@ -131,15 +131,14 @@ def upload():
 @html.route("/<repo>/<name>")
 def package(repo, name):
     p = Package.query.filter(Package.name == name).filter(Package.repo == repo).first()
-
+    if not p:
+        abort(404)
     if p.contents == None:
         packagePath = os.path.join(_cfg("storage"), p.repo, "{0}-{1}.pkg".format(p.name, p.version))
         packageDict = PackageInfo.get_package_contents(packagePath)
         p.contents = json.dumps(packageDict)
         db.commit()
     packageContents = json.loads(p.contents) 
-    if not p:
-        abort(404)
     return render_template("package.html", package=p, packageContents = packageContents)
 
 
