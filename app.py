@@ -35,50 +35,56 @@ def prepare():
             copyfile(os.path.join('styles', f), os.path.join(app.static_folder, f))
 
     # Compile scripts (coffeescript)
-    d = os.walk('scripts')
-    for f in list(d)[0][2]:
-        outputpath = os.path.join(app.static_folder, os.path.basename(f))
-        inputpath = os.path.join('scripts', f)
+    try:
+        d = os.walk('scripts')
+        for f in list(d)[0][2]:
+            outputpath = os.path.join(app.static_folder, os.path.basename(f))
+            inputpath = os.path.join('scripts', f)
 
-        if os.path.splitext(f)[1] == ".js":
+            if os.path.splitext(f)[1] == ".js":
+                copyfile(inputpath, outputpath)
+            elif os.path.splitext(f)[1] == ".manifest":
+                with open(inputpath) as r:
+                    manifest = r.read().split('\n')
+
+                javascript = ''
+                for script in manifest:
+                    script = script.strip(' ')
+
+                    if script == '' or script.startswith('#'):
+                        continue
+
+                    bare = False
+                    if script.startswith('bare: '):
+                        bare = True
+                        script = script[6:]
+
+                    with open(os.path.join('scripts', script)) as r:
+                        coffee = r.read()
+                        if script.endswith('.js'):
+                            javascript += coffee # straight up copy
+                        else:
+                            javascript += coffeescript.compile(coffee, bare=bare)
+                output = '.'.join(f.rsplit('.')[:-1]) + '.js'
+
+                # TODO: Bug the slimit guys to support python 3
+                #if not app.debug:
+                #    javascript = minify(javascript)
+
+                with open(os.path.join(app.static_folder, output), "w") as w:
+                    w.write(javascript)
+                    w.flush()
+    except:
+        pass
+
+    try:
+        d = os.walk('images')
+        for f in list(d)[0][2]:
+            outputpath = os.path.join(app.static_folder, os.path.basename(f))
+            inputpath = os.path.join('images', f)
             copyfile(inputpath, outputpath)
-        elif os.path.splitext(f)[1] == ".manifest":
-            with open(inputpath) as r:
-                manifest = r.read().split('\n')
-
-            javascript = ''
-            for script in manifest:
-                script = script.strip(' ')
-
-                if script == '' or script.startswith('#'):
-                    continue
-
-                bare = False
-                if script.startswith('bare: '):
-                    bare = True
-                    script = script[6:]
-
-                with open(os.path.join('scripts', script)) as r:
-                    coffee = r.read()
-                    if script.endswith('.js'):
-                        javascript += coffee # straight up copy
-                    else:
-                        javascript += coffeescript.compile(coffee, bare=bare)
-            output = '.'.join(f.rsplit('.')[:-1]) + '.js'
-
-            # TODO: Bug the slimit guys to support python 3
-            #if not app.debug:
-            #    javascript = minify(javascript)
-
-            with open(os.path.join(app.static_folder, output), "w") as w:
-                w.write(javascript)
-                w.flush()
-
-    d = os.walk('images')
-    for f in list(d)[0][2]:
-        outputpath = os.path.join(app.static_folder, os.path.basename(f))
-        inputpath = os.path.join('images', f)
-        copyfile(inputpath, outputpath)
+    except:
+        pass
 
 @app.before_first_request
 def compile_first():
