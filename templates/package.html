@@ -12,6 +12,28 @@ document.getElementById("approval-button").addEventListener('click', function(e)
 }, false);
 </script>
 {% endif %}
+
+{% if package.user == user or user.admin %}
+<script type="text/javascript">
+document.getElementById("transfer-button").addEventListener('click', function(e) {
+    var xhr = new XMLHttpRequest();
+
+    var transferUser = document.getElementsByName('transferUser')[0].value;
+    var api_string = '/api/v1/transfer/{{ package.repo }}/{{ package.name }}/' + transferUser;
+    xhr.open('POST', api_string);
+    xhr.onload = function() {
+        window.location = window.location;
+    };
+        if(confirm("Transfer package ownership to " + transferUser + " ?"))
+        {
+	    xhr.send();
+        }
+}, false);
+
+</script>
+{% endif %}
+
+
 {% endblock %}
 {% block title %}
 <title>{{ package.repo }}/{{ package.name }} {{ package.version }}</title>
@@ -80,7 +102,13 @@ document.getElementById("approval-button").addEventListener('click', function(e)
         {% if package.user %}
         <tr>
             <th>Submitter</th>
-            <td><a href="/user/{{ package.user.username }}">{{ package.user.username }}</a></td>
+            <td><a href="/user/{{ package.user.username }}">{{ package.user.username }}</a>
+{% if package.user == user or user.admin %}
+    <button class="btn btn-primary pull-right btn-sm" id="transfer-button">Transfer</button>
+    <input class="pull-right" type="text" id="transferUser" name="transferUser" value=""> 
+{% endif %}
+            </td>
+ 
         </tr>
         {% endif %}
         {% if package.capabilities %}

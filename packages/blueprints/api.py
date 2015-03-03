@@ -66,6 +66,25 @@ def approve_package(repo, name):
     db.commit()
     return { 'success': True }
 
+
+@api.route("/api/v1/transfer/<repo>/<name>/<username>", methods=["POST"])
+@json_output
+def transfer_package(repo, name, username):
+    package = Package.query.filter(Package.name == name).filter(Package.repo == repo).first()
+    if not package:
+        return { 'success': False, 'error': 'Package not found.' }, 404
+    if not current_user or not current_user.admin:
+        return { 'success': False, 'error': 'You do not have permission to move this package.' }, 403
+
+    new_user = User.query.filter(User.username == username).first()
+    if not new_user:
+        return { 'success': False, 'error': 'User not found' }, 404
+    package.user = new_user
+    db.commit()
+
+    return { 'success': True }
+
+
 @api.route("/api/v1/upload", methods=['POST'])
 @json_output
 @loginrequired
