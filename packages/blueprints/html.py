@@ -155,11 +155,11 @@ def user(username):
 @html.route("/search")
 def search():
     terms = request.args.get('terms')
-    page = 0
+
     if not terms:
         terms = ''
     try:
-        page = request.form.get('page')
+        page = request.args.get('page')
         if not page:
             page = '0'
         page = int(page)
@@ -168,15 +168,22 @@ def search():
     split_terms = shlex.split(terms)
     results = Package.query
     filters = list()
+
+    PAGE_SIZE = request.args.get('count')
+    if not PAGE_SIZE:
+        PAGE_SIZE = '10'
+    PAGE_SIZE = int(PAGE_SIZE)
+
     for term in split_terms:
         filters.append(Package.repo.ilike('%' + term + '%'))
         filters.append(Package.name.ilike('%' + term + '%'))
         filters.append(Package.description.ilike('%' + term + '%'))
     results = results.filter(or_(*filters))
     results = results.filter(Package.approved == True)
-    total = math.ceil(results.count() / 50)
-    results = results.all()[page * 50:(page + 1) * 50]
-    return render_template("search.html", results=results, terms=terms)
+    total = math.ceil(results.count() / PAGE_SIZE)
+    pageCount = total
+    results = results.all()[page * PAGE_SIZE:(page + 1) * PAGE_SIZE]
+    return render_template("search.html", results=results, terms=terms, pageCount=pageCount)
 
 @html.route("/<repo>/<name>/download")
 def download(repo, name):
