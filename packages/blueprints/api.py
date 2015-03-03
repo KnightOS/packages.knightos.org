@@ -73,7 +73,7 @@ def transfer_package(repo, name, username):
     package = Package.query.filter(Package.name == name).filter(Package.repo == repo).first()
     if not package:
         return { 'success': False, 'error': 'Package not found.' }, 404
-    if not current_user or not current_user.admin:
+    if not current_user == package.user and not current_user.admin:
         return { 'success': False, 'error': 'You do not have permission to move this package.' }, 403
 
     new_user = User.query.filter(User.username == username).first()
