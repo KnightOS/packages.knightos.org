@@ -66,6 +66,17 @@ def approve_package(repo, name):
     db.commit()
     return { 'success': True }
 
+@api.route("/api/v1/<repo>/<name>/unapprove", methods=["POST"])
+@json_output
+def unapprove_package(repo, name):
+    package = Package.query.filter(Package.name == name).filter(Package.repo == repo).first()
+    if not package:
+        return { 'success': False, 'error': 'Package not found.' }, 404
+    if not current_user or not current_user.admin:
+        return { 'success': False, 'error': 'You do not have permission to unapprove this package.' }, 403
+    package.approved = False
+    db.commit()
+    return { 'success': True }
 
 @api.route("/api/v1/transfer/<repo>/<name>/<username>", methods=["POST"])
 @json_output

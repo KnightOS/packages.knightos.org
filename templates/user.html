@@ -9,7 +9,7 @@
     <tbody>
         <tr>
             <th>Knighted Since</th>
-            <td>{{ user.created }} </td>
+            <td>{{ user_profile.created.strftime('%B %d, %Y') }} </td>
         </tr>
         {% if user_profile.username == user.username or user.admin %}
         <tr>

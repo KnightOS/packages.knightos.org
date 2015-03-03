@@ -11,6 +11,16 @@ document.getElementById("approval-button").addEventListener('click', function(e)
     xhr.send();
 }, false);
 </script>
+<script type="text/javascript">
+document.getElementById("unapproval-button").addEventListener('click', function(e) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/api/v1/{{ package.repo }}/{{ package.name }}/unapprove');
+    xhr.onload = function() {
+        window.location = window.location;
+    };
+    xhr.send();
+}, false);
+</script>
 {% endif %}
 
 {% if package.user == user or user.admin %}
@@ -32,8 +42,6 @@ document.getElementById("transfer-button").addEventListener('click', function(e)
 
 </script>
 {% endif %}
-
-
 {% endblock %}
 {% block title %}
 <title>{{ package.repo }}/{{ package.name }} {{ package.version }}</title>
@@ -50,6 +58,13 @@ document.getElementById("transfer-button").addEventListener('click', function(e)
     {% endif %}
     <p>This package has not yet been approved. You install it at your own risk.</p>
 </div>
+{% else %}
+    {% if user and user.admin %}
+        <div class="alert alert-success">
+            <button class="btn btn-primary pull-right btn-sm" style="margin-top: -5px;" id="unapproval-button">Unapprove</button>
+            <p>This package has already been approved.</p>
+        </div>
+    {% endif %}
 {% endif %}
 <table class="table">
     <tbody>
