@@ -142,6 +142,16 @@ def package(repo, name):
         abort(404)
     return render_template("package.html", package=p, packageContents = packageContents)
 
+
+@html.route("/user/<username>")
+def user(username):
+    user_profile = User.query.filter(User.username == username).first()
+    if not user_profile:
+        abort(404)
+    user_packages = Package.query.filter(Package.user == user_profile).all()
+    return render_template("user.html", user_profile=user_profile, user_packages=user_packages)
+
+
 @html.route("/search")
 def search():
     terms = request.args.get('terms')

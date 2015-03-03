@@ -77,6 +77,12 @@ document.getElementById("approval-button").addEventListener('click', function(e)
             <td>{{ package.maintainer }}</td>
         </tr>
         {% endif %}
+        {% if package.user %}
+        <tr>
+            <th>Submitter</th>
+            <td><a href="/user/{{ package.user.username }}">{{ package.user.username }}</a></td>
+        </tr>
+        {% endif %}
         {% if package.capabilities %}
         <tr>
             <th>Required Capabilities</th>

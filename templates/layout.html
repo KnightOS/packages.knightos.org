@@ -35,6 +35,7 @@
                 </ul>
                 {% else %}
                 <ul class="nav navbar-nav navbar-right">
+                    <li><a href="/user/{{ user.username }}">My Account</a></li>
                     <li><a href="/upload">Upload Package</a></li>
                     <li class="navbar-text">Hello, {{ user.username }} &mdash; <a href="/logout">Log out</a></li>
                 </ul>

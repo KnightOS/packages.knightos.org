@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+{% block title %}
+<title>{{ user_profile.username }}</title>
+{% endblock %}
+{% block body %}
+<h2>{{ user_profile.username }}</h2>
+
+<table class="table">
+    <tbody>
+        <tr>
+            <th>Knighted Since</th>
+            <td>{{ user.created }} </td>
+        </tr>
+        {% if user_profile.username == user.username or user.admin %}
+        <tr>
+            <th>Email</th>
+            <td><a href="mailto:{{ user_profile.email }}">{{ user_profile.email }}</a></td>
+        </tr>
+        {% endif %}
+    </tbody>
+</table>
+<table class="table">
+    <tbody>
+        <tr>
+            <th><b>Package</b></th>
+            <td><b>Last Updated</b></td>
+        </tr>
+        {% if len(user_packages) == 0 %}
+            <tr><th><em>(none)</em></th></tr>
+        {% endif %}
+        {% for p in user_packages %}
+        <tr>
+            <th><a href="/{{ p.repo }}/{{ p.name }}">{{ p.repo }}/{{ p.name }}</a> {{ p.version }}</th>
+            <td>{{ p.updated.strftime("%G-%m-%d") }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}
