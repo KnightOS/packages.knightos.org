@@ -97,9 +97,16 @@ document.getElementById("approval-button").addEventListener('click', function(e)
     <div class="panel-body">
     <b><u>Package Contents:</u></b>
         <ul id="package-contents">
-            {% for listing in packageContents %}
-                <li>{{ listing }}</li>
-            {% endfor %}
+             {%- for key, value in packageContents.items() recursive%}
+                 <li>{{key}}
+                     <ul id="package-contents">
+                         {%-if key != value %}
+                             {{loop(value.items())}}
+                         {%- endif %}
+                     </ul>
+                 </li>
+             {%- endfor%}
+
         </ul>
     </div>
 </div>
