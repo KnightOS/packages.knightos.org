@@ -5,10 +5,10 @@
 <form id="searchForm" role="search" method="GET" action="/search" class="row">
     <div class="col-md-2">
         <select name="count" class="form-control" form="searchForm" value="{{ count }}">
-          <option {{'selected' if request.args.get('count')|int==10 else ''}} value="10">10</option>
-          <option {{'selected' if request.args.get('count')|int==25 else ''}} value="25">25</option>
-          <option {{'selected' if request.args.get('count')|int==50 else ''}} value="50">50</option>
-          <option {{'selected' if request.args.get('count')|int==100 else ''}} value="100">100</option>
+          <option {{'selected' if request.args.get('count')|int==10 else ''}} value="10">10 Per Page</option>
+          <option {{'selected' if request.args.get('count')|int==25 else ''}} value="25">25 Per Page</option>
+          <option {{'selected' if request.args.get('count')|int==50 else ''}} value="50">50 Per Page</option>
+          <option {{'selected' if request.args.get('count')|int==100 else ''}} value="100">100 Per Page</option>
         </select>
     </div>
     <div class="col-md-8">
@@ -22,11 +22,18 @@
 </form>
 <table class="table">
     <tbody>
+        <tr>
+            <th>Repository/Name</th>
+            <th>Version</th>
+            <th>Description</th>
+            <th>Last Updated</th>
+        </tr>
         {% for result in results %}
         <tr>
-            <td><a href="/{{ result.repo }}/{{ result.name }}">{{ result.repo }}/{{ result.name }}</a></td>
-            <td>{{ result.version }}</td>
-            <td>{{ result.description }}</td>
+            <td class="col-md-3"><a href="/{{ result.repo }}/{{ result.name }}">{{ result.repo }}/{{ result.name }}</a></td>
+            <td class="col-md-1">{{ result.version }}</td>
+            <td class="col-md-6">{{ result.description }}</td>
+            <td>{{ result.updated.strftime('%B %d, %Y')  }}</td>
         </tr>
         {% endfor %}
     </tbody>
