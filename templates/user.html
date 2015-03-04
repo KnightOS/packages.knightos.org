@@ -26,7 +26,10 @@
             <td><b>Last Updated</b></td>
         </tr>
         {% if len(user_packages) == 0 %}
-            <tr><th><em>(none)</em></th></tr>
+            <tr>
+                <th><em>(none)</em></th>
+                <td></td>
+            </tr>
         {% endif %}
         {% for p in user_packages %}
         <tr>

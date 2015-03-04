@@ -142,6 +142,48 @@ def package(repo, name):
     return render_template("package.html", package=p, packageContents = packageContents)
 
 
+@html.route("/users")
+def users():
+    terms = request.args.get('terms')
+    if not terms:
+        terms = ''
+
+    try:
+        page = request.args.get('page')
+        if not page:
+            page = '0'
+        page = int(page)
+    except:
+        abort(400)
+    split_terms = shlex.split(terms)
+    results = User.query
+    filters = list()
+
+    try:
+        PAGE_SIZE = request.args.get('count')
+        if not PAGE_SIZE:
+            PAGE_SIZE = '10'
+        PAGE_SIZE = int(PAGE_SIZE)
+    except:
+        PAGE_SIZE = 10
+
+    if PAGE_SIZE <= 0: PAGE_SIZE = 10
+
+    for term in split_terms:
+        filters.append(User.username.ilike('%' + term + '%'))
+        filters.append(User.email.ilike('%' + term + '%'))
+    results = results.filter(or_(*filters))
+
+    if current_user and current_user.admin:
+        results = results.filter()
+    else:
+        results = results.filter(User.confirmation == None)
+
+    total = math.ceil(results.count() / PAGE_SIZE)
+    pageCount = total
+    results = results.all()[page * PAGE_SIZE:(page + 1) * PAGE_SIZE]
+    return render_template("users.html", results=results, terms=terms, pageCount=pageCount)
+
 @html.route("/user/<username>")
 def user(username):
     user_profile = User.query.filter(User.username == username).first()

@@ -1,0 +1,63 @@
+{% extends "layout.html" %}
+{% block body %}
+
+
+<form id="searchForm" role="search" method="GET" action="/users" class="row">
+    <div class="col-md-2">
+        <select name="count" class="form-control" form="searchForm" value="{{ count }}">
+          <option {{'selected' if request.args.get('count')|int==10 else ''}} value="10">10 Per Page</option>
+          <option {{'selected' if request.args.get('count')|int==25 else ''}} value="25">25 Per Page</option>
+          <option {{'selected' if request.args.get('count')|int==50 else ''}} value="50">50 Per Page</option>
+          <option {{'selected' if request.args.get('count')|int==100 else ''}} value="100">100 Per Page</option>
+        </select>
+    </div>
+    <div class="col-md-8">
+        <div class="form-group">
+            <input type="text" name="terms" class="form-control input-block-level" placeholder="Search users" value="{{ terms }}">
+        </div>
+    </div>
+    <div class="col-md-2">
+        <button type="submit" class="btn btn-default btn-block">Submit</button>
+    </div>
+</form>
+<table class="table">
+    <tbody>
+        <tr>
+            <th>User</th>
+            <th>Date Knighted</th>
+            {% if current_user and current_user.admin %}
+            <th>Confirmed</th>
+            {% endif %}
+        </tr>
+        {% for result in results %}
+        <tr>
+            <td class="col-md-3"><a href="/user/{{ result.username }}">{{ result.username }}</a></td>
+            <td>{{ result.created.strftime('%B %d, %Y')  }}</td>
+            {% if current_user and current_user.admin %}
+            <td>
+            {% if result.confirmation == None %}
+            <b><font color="3C763D">Confirmed</font></b>
+            {% else %}
+            <b><font color="A94442">Not Confirmed</font></b>
+            {% endif %}
+            </td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<ul class="page-radios">
+{% for i in range(pageCount) %}
+    <li>
+        {% if not request.args.get('page') %}
+        <input form="searchForm" onclick="searchForm.submit()" type=radio name="page" value="{{ i }}" {{'checked' if i==0 else ''}} id ="a{{ i }}">
+        {% else %}
+        <input form="searchForm" onclick="searchForm.submit()" type=radio name="page" value="{{ i }}" {{'checked' if request.args.get('page')|int == i else ''}} id="a{{ i }}">
+        {% endif %}
+        <label for="a{{ i }}">{{ i + 1 }}</label>
+    </li>
+{% endfor %}
+</ul>
+
+{% endblock %}
