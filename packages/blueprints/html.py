@@ -176,6 +176,8 @@ def search():
     except:
         PAGE_SIZE = 10
 
+    if PAGE_SIZE <= 0: PAGE_SIZE = 10
+
     for term in split_terms:
         filters.append(Package.repo.ilike('%' + term + '%'))
         filters.append(Package.name.ilike('%' + term + '%'))

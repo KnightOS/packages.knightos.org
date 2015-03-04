@@ -38,22 +38,18 @@
         {% endfor %}
     </tbody>
 </table>
-<ul class="pagination">
-    {% for i in range(pageCount) %}
+
+<ul class="page-radios">
+{% for i in range(pageCount) %}
+    <li>
         {% if not request.args.get('page') %}
-            {% if i == 0 %}
-                <li class="active"><a href="/search?terms={{terms}}&count={{ request.args.get('count') }}&page={{ i }}">{{ i + 1}}</a></li>
-            {% else %}
-                <li><a href="/search?terms={{terms}}&count={{ request.args.get('count') }}&page={{ i }}">{{ i + 1}}</a></li>
-            {% endif %}
+        <input form="searchForm" onclick="searchForm.submit()" type=radio name="page" value="{{ i }}" {{'checked' if i==0 else ''}} id ="a{{ i }}">
         {% else %}
-            {% if request.args.get('page')|int == i %}
-                <li class="active"><a href="/search?terms={{terms}}&count={{ request.args.get('count') }}&page={{ i }}">{{ i + 1}}</a></li>
-            {% else %}
-                <li><a href="/search?terms={{terms}}&count={{ request.args.get('count') }}&page={{ i }}">{{ i + 1}}</a></li>
-            {% endif %}
+        <input form="searchForm" onclick="searchForm.submit()" type=radio name="page" value="{{ i }}" {{'checked' if request.args.get('page')|int == i else ''}} id="a{{ i }}">
         {% endif %}
-    {% endfor %}
+        <label for="a{{ i }}">{{ i + 1 }}</label>
+    </li>
+{% endfor %}
 </ul>
 
 {% endblock %}

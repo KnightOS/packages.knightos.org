@@ -24,3 +24,46 @@
     padding-left: 15px;
 }
 
+
+
+.page-radios {
+     list-style-type:none;
+     margin:25px 0 0 0;
+     padding:0;
+}
+.page-radios li {
+    float:left;
+    margin:0 0 0 0;
+    width:25px;
+    height:40px;
+    position:relative;
+}
+.page-radios label, .page-radios input {
+    display:block;
+    position:absolute;
+    top:10px;
+    left:0;
+    right:0;
+    bottom:0;
+    text-align: center;
+
+    background:white;
+    border-color: #DDD;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 4px;
+    border-top-left-radius: 4px;
+
+    background-color: white;
+    color: #428BCA;
+}
+.page-radios input[type="radio"] {
+    opacity:0.01;
+    z-index:100;
+}
+.page-radios input[type="radio"]:checked + label,
+.Checked + label {
+    background-color: #428BCA;
+    color: white;
+}
+
