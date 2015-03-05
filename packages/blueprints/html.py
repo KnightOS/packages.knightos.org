@@ -145,6 +145,10 @@ def package(repo, name):
 
 @html.route("/users")
 def users():
+    
+    if not current_user or not current_user.admin:
+        abort(403)
+
     terms = request.args.get('terms')
     if not terms:
         terms = ''
@@ -174,12 +178,7 @@ def users():
         filters.append(User.username.ilike('%' + term + '%'))
         filters.append(User.email.ilike('%' + term + '%'))
     results = results.filter(or_(*filters))
-
-    if current_user and current_user.admin:
-        results = results.filter()
-    else:
-        results = results.filter(User.confirmation == None)
-
+    results = results.filter()
     total = math.ceil(results.count() / PAGE_SIZE)
     pageCount = total
     results = results.order_by(desc(User.created)).all()[page * PAGE_SIZE:(page + 1) * PAGE_SIZE]

@@ -49,6 +49,7 @@
                 </tbody>
             </table>
         </div>
+        {% if user and user.admin %}
         <h4>Recently Knighted <a href="/users">(view all)</a></h4>
         <div class="well well-sm">
             <table style="width: 100%">
@@ -65,7 +66,6 @@
                 </tbody>
             </table>
         </div>
-        {% if user and user.admin %}
         <h4>Approval Queue</h4>
         <div class="well well-sm">
             <table style="width: 100%">
