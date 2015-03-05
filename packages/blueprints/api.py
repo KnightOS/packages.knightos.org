@@ -88,7 +88,7 @@ def set_admin(username):
     if not current_user or not current_user.admin:
         return { 'success': False, 'error': 'You do not have permission to set admins.' }, 403
     if current_user.username == user.username:
-        return { 'success': False, 'error': 'You cannot change your own admin privileges.' }, 404
+        return { 'success': False, 'error': 'You cannot change your own admin privileges.' }, 403
     user.admin = True
     db.commit()
     return { 'success': True }
@@ -102,7 +102,7 @@ def remove_admin(username):
     if not current_user or not current_user.admin:
         return { 'success': False, 'error': 'You do not have permission to remove admins.' }, 403
     if current_user.username == user.username:
-        return { 'success': False, 'error': 'You cannot change your own admin privileges.' }, 404
+        return { 'success': False, 'error': 'You cannot change your own admin privileges.' }, 403
     user.admin = False
     db.commit()
     return { 'success': True }
@@ -128,7 +128,7 @@ def unconfirm_user(username):
     if not current_user or not current_user.admin:
         return { 'success': False, 'error': 'You do not have permission to unconfirm this user.' }, 403
     if current_user.username == user.username:
-        return { 'success': False, 'error': 'You cannot unconfirm your own account.' }, 404
+        return { 'success': False, 'error': 'You cannot unconfirm your own account.' }, 403
     user.confirmation = binascii.b2a_hex(os.urandom(20)).decode("utf-8")
     db.commit()
     return { 'success': True }
