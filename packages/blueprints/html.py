@@ -24,8 +24,9 @@ html = Blueprint('html', __name__, template_folder='../../templates')
 @html.route("/")
 def index():
     recent = Package.query.filter(Package.approved == True).order_by(desc(Package.updated)).limit(10).all()
+    recent_users = User.query.filter(User.confirmation == None).order_by(desc(User.created)).limit(10).all()
     queue = Package.query.filter(Package.approved == False).order_by(desc(Package.updated)).all()
-    return render_template("index.html", recent=recent, queue=queue)
+    return render_template("index.html", recent=recent, recent_users=recent_users, queue=queue)
 
 @html.route("/register", methods=['GET', 'POST'])
 def register():
@@ -181,7 +182,7 @@ def users():
 
     total = math.ceil(results.count() / PAGE_SIZE)
     pageCount = total
-    results = results.all()[page * PAGE_SIZE:(page + 1) * PAGE_SIZE]
+    results = results.order_by(desc(User.created)).all()[page * PAGE_SIZE:(page + 1) * PAGE_SIZE]
     return render_template("users.html", results=results, terms=terms, pageCount=pageCount)
 
 @html.route("/user/<username>")
