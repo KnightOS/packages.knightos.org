@@ -10,6 +10,7 @@ from packages.kpack import PackageInfo
 from packages.email import send_new_pacakge_email
 
 import os
+import binascii
 import zipfile
 import urllib
 import tempfile
@@ -75,6 +76,60 @@ def unapprove_package(repo, name):
     if not current_user or not current_user.admin:
         return { 'success': False, 'error': 'You do not have permission to unapprove this package.' }, 403
     package.approved = False
+    db.commit()
+    return { 'success': True }
+
+@api.route("/api/v1/user/<username>/setadmin", methods=["POST"])
+@json_output
+def set_admin(username):
+    user = User.query.filter(User.username == username).first()
+    if not user:
+        return { 'success': False, 'error': 'User not found.' }, 404
+    if not current_user or not current_user.admin:
+        return { 'success': False, 'error': 'You do not have permission to set admins.' }, 403
+    if current_user.username == user.username:
+        return { 'success': False, 'error': 'You cannot change your own admin privileges.' }, 404
+    user.admin = True
+    db.commit()
+    return { 'success': True }
+
+@api.route("/api/v1/user/<username>/removeadmin", methods=["POST"])
+@json_output
+def remove_admin(username):
+    user = User.query.filter(User.username == username).first()
+    if not user:
+        return { 'success': False, 'error': 'User not found.' }, 404
+    if not current_user or not current_user.admin:
+        return { 'success': False, 'error': 'You do not have permission to remove admins.' }, 403
+    if current_user.username == user.username:
+        return { 'success': False, 'error': 'You cannot change your own admin privileges.' }, 404
+    user.admin = False
+    db.commit()
+    return { 'success': True }
+
+@api.route("/api/v1/user/<username>/confirm/<confirmation>", methods=["POST"])
+@json_output
+def confirm_user(username, confirmation):
+    user = User.query.filter(User.username == username).first()
+    if not user:
+        return { 'success': False, 'error': 'User not found.' }, 404
+    if (not current_user or not current_user.admin) and (confirmation != user.confirmation):
+        return { 'success': False, 'error': 'You do not have permission to confirm this user.' }, 403
+    user.confirmation = None
+    db.commit()
+    return { 'success': True }
+
+@api.route("/api/v1/user/<username>/unconfirm", methods=["POST"])
+@json_output
+def unconfirm_user(username):
+    user = User.query.filter(User.username == username).first()
+    if not user:
+        return { 'success': False, 'error': 'User not found.' }, 404
+    if not current_user or not current_user.admin:
+        return { 'success': False, 'error': 'You do not have permission to unconfirm this user.' }, 403
+    if current_user.username == user.username:
+        return { 'success': False, 'error': 'You cannot unconfirm your own account.' }, 404
+    user.confirmation = binascii.b2a_hex(os.urandom(20)).decode("utf-8")
     db.commit()
     return { 'success': True }
 

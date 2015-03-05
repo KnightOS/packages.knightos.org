@@ -1,9 +1,98 @@
 {% extends "layout.html" %}
+{% block scripts %}
+<script type="text/javascript">
+document.getElementById("set-admin-button").addEventListener('click', function(e) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/api/v1/user/{{ user_profile.username }}/setadmin');
+    xhr.onload = function() {
+        window.location = window.location;
+    };
+    if(confirm("Make {{ user_profile.username }} an admin?"))
+    {
+        xhr.send();
+    }
+}, false);
+</script>
+<script type="text/javascript">
+document.getElementById("remove-admin-button").addEventListener('click', function(e) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/api/v1/user/{{ user_profile.username }}/removeadmin');
+    xhr.onload = function() {
+        window.location = window.location;
+    };
+    if(confirm("Remove {{ user_profile.username }} as admin?"))
+    {
+        xhr.send();
+    }
+}, false);
+</script>
+<script type="text/javascript">
+document.getElementById("confirm-user-button").addEventListener('click', function(e) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/api/v1/user/{{ user_profile.username }}/confirm/ADMIN');
+    xhr.onload = function() {
+        window.location = window.location;
+    };
+    if(confirm("Confirm {{ user_profile.username }}?"))
+    {
+        xhr.send();
+    }
+}, false);
+</script>
+<script type="text/javascript">
+document.getElementById("unconfirm-user-button").addEventListener('click', function(e) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/api/v1/user/{{ user_profile.username }}/unconfirm');
+    xhr.onload = function() {
+        window.location = window.location;
+    };
+    if(confirm("Unconfirm {{ user_profile.username }}?"))
+    {
+        xhr.send();
+    }
+}, false);
+</script>
+{% endblock %}
+
 {% block title %}
 <title>{{ user_profile.username }}</title>
 {% endblock %}
 {% block body %}
 <h2>{{ user_profile.username }}</h2>
+
+
+{% if user_profile.confirmation != None %}
+<div class="alert alert-warning">
+    {% if current_user and current_user.admin %}
+    <button class="btn btn-primary pull-right btn-sm" style="margin-top: -5px;" id="confirm-user-button">Confirm User</button>
+    {% endif %}
+    <p>This user has not confirmed their email address.</p>
+</div>
+{% else %}
+    {% if current_user and current_user.admin %}
+        <div class="alert alert-success">
+            <button class="btn btn-primary pull-right btn-sm" style="margin-top: -5px;" id="unconfirm-user-button">Unconfirm User</button>
+            <p>This user has confirmed their email address..</p>
+        </div>
+    {% endif %}
+{% endif %}
+
+{% if not user_profile.admin %}
+<div class="alert alert-warning">
+    {% if current_user and current_user.admin %}
+    <button class="btn btn-primary pull-right btn-sm" style="margin-top: -5px;" id="set-admin-button">Make Admin</button>
+    {% endif %}
+    <p>This user is not currently an admin.</p>
+</div>
+{% else %}
+    {% if current_user and current_user.admin %}
+        <div class="alert alert-success">
+            <button class="btn btn-primary pull-right btn-sm" style="margin-top: -5px;" id="remove-admin-button">Remove Admin</button>
+            <p>This user is already an admin.</p>
+        </div>
+    {% endif %}
+{% endif %}
+
 
 <table class="table">
     <tbody>

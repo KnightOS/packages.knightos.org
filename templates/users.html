@@ -1,7 +1,5 @@
 {% extends "layout.html" %}
 {% block body %}
-
-
 <form id="searchForm" role="search" method="GET" action="/users" class="row">
     <div class="col-md-2">
         <select name="count" class="form-control" form="searchForm" value="{{ count }}">
@@ -25,23 +23,27 @@
         <tr>
             <th>User</th>
             <th>Date Knighted</th>
-            {% if current_user and current_user.admin %}
             <th>Confirmation Status</th>
-            {% endif %}
+            <th>Privilege Level</th>
         </tr>
         {% for result in results %}
         <tr>
             <td class="col-md-3"><a href="/user/{{ result.username }}">{{ result.username }}</a></td>
             <td>{{ result.created.strftime('%B %d, %Y')  }}</td>
-            {% if current_user and current_user.admin %}
             <td>
-            {% if result.confirmation == None %}
-            <b><font color="3C763D">Confirmed</font></b>
-            {% else %}
-            <b><font color="A94442">Not Confirmed</font></b>
-            {% endif %}
+                {% if result.confirmation == None %}
+                <b><font color="3C763D">Confirmed</font></b>
+                {% else %}
+                <b><font color="A94442">Not Confirmed</font></b>
+                {% endif %}
             </td>
-            {% endif %}
+            <td>
+                {% if result.admin %}
+                <b><font color="A94442">Admin</font></b>
+                {% else %}
+                <b>User</b>
+                {% endif %}
+            </td>
         </tr>
         {% endfor %}
     </tbody>
