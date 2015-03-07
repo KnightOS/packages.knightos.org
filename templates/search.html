@@ -27,6 +27,7 @@
                     <option {{'selected' if request.args.get('count')|int==50 else ''}} value="50">50 Per Page</option>
                     <option {{'selected' if request.args.get('count')|int==100 else ''}} value="100">100 Per Page</option>
                 </select>
+                <div class="hidden">
                 <div class="checkbox">
                     <label>
                         <input type="checkbox" name="repos" value="all"> all
@@ -56,6 +57,7 @@
                     <label>
                         <input type="checkbox" name="repos" value="nonfree"> nonfree
                     </label>
+                </div>
                 </div>
             </div>
         </div>
