@@ -2,54 +2,96 @@
 {% block body %}
 
 
-<form id="searchForm" role="search" method="GET" action="/search" class="row">
-    <div class="col-md-2">
-        <select name="count" class="form-control" form="searchForm" value="{{ count }}">
-          <option {{'selected' if request.args.get('count')|int==10 else ''}} value="10">10 Per Page</option>
-          <option {{'selected' if request.args.get('count')|int==25 else ''}} value="25">25 Per Page</option>
-          <option {{'selected' if request.args.get('count')|int==50 else ''}} value="50">50 Per Page</option>
-          <option {{'selected' if request.args.get('count')|int==100 else ''}} value="100">100 Per Page</option>
-        </select>
+<div class="row">
+    <div class="col-md-12">
+        <form id="searchForm" role="search" method="GET" action="/search" class="row">
+            <div class="col-md-2">
+            </div>
+            <div class="col-md-8">
+                <div class="form-group">
+                    <input type="text" name="terms" class="form-control input-block-level" placeholder="Search packages" value="{{ terms }}">
+                </div>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-default btn-block">Submit</button>
+            </div>
+        </form>
     </div>
-    <div class="col-md-8">
-        <div class="form-group">
-            <input type="text" name="terms" class="form-control input-block-level" placeholder="Search packages" value="{{ terms }}">
+
+    <div class="row" style="margin-top:10px;">
+        <div class="col-md-2">
+            <div class="well well-sm">
+                <select name="count" class="form-control" form="searchForm" value="{{ count }}" style="margin-left: 0px;">
+                    <option {{'selected' if request.args.get('count')|int==10 else ''}} value="10">10 Per Page</option>
+                    <option {{'selected' if request.args.get('count')|int==25 else ''}} value="25">25 Per Page</option>
+                    <option {{'selected' if request.args.get('count')|int==50 else ''}} value="50">50 Per Page</option>
+                    <option {{'selected' if request.args.get('count')|int==100 else ''}} value="100">100 Per Page</option>
+                </select>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" name="repos" value="all"> all
+                    </label>
+                </div>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" name="repos" value="core"> core
+                    </label>
+                </div>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" name="repos" value="extra"> extra
+                    </label>
+                </div>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" name="repos" value="community"> community
+                    </label>
+                </div>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" name="repos" value="ports"> ports
+                    </label>
+                </div>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" name="repos" value="nonfree"> nonfree
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-10">
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <th>Repository/Name</th>
+                        <th>Version</th>
+                        <th>Description</th>
+                        <th>Last Updated</th>
+                    </tr>
+                    {% for result in results %}
+                    <tr>
+                        <td class="col-md-3"><a href="/{{ result.repo }}/{{ result.name }}">{{ result.repo }}/{{ result.name }}</a></td>
+                        <td class="col-md-1">{{ result.version }}</td>
+                        <td class="col-md-6">{{ result.description }}</td>
+                        <td>{{ result.updated.strftime('%B %d, %Y')  }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <ul class="page-radios">
+            {% for i in range(pageCount) %}
+                <li>
+                {% if not request.args.get('page') %}
+                    <input form="searchForm" onclick="searchForm.submit()" type=radio name="page" value="{{ i }}" {{'checked' if i==0 else ''}} id ="a{{ i }}">
+                {% else %}
+                    <input form="searchForm" onclick="searchForm.submit()" type=radio name="page" value="{{ i }}" {{'checked' if request.args.get('page')|int == i else ''}} id="a{{ i }}">
+                {% endif %}
+                <label for="a{{ i }}">{{ i + 1 }}</label>
+               </li>
+            {% endfor %}
+            </ul>
         </div>
     </div>
-    <div class="col-md-2">
-        <button type="submit" class="btn btn-default btn-block">Submit</button>
-    </div>
-</form>
-<table class="table">
-    <tbody>
-        <tr>
-            <th>Repository/Name</th>
-            <th>Version</th>
-            <th>Description</th>
-            <th>Last Updated</th>
-        </tr>
-        {% for result in results %}
-        <tr>
-            <td class="col-md-3"><a href="/{{ result.repo }}/{{ result.name }}">{{ result.repo }}/{{ result.name }}</a></td>
-            <td class="col-md-1">{{ result.version }}</td>
-            <td class="col-md-6">{{ result.description }}</td>
-            <td>{{ result.updated.strftime('%B %d, %Y')  }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
 
-<ul class="page-radios">
-{% for i in range(pageCount) %}
-    <li>
-        {% if not request.args.get('page') %}
-        <input form="searchForm" onclick="searchForm.submit()" type=radio name="page" value="{{ i }}" {{'checked' if i==0 else ''}} id ="a{{ i }}">
-        {% else %}
-        <input form="searchForm" onclick="searchForm.submit()" type=radio name="page" value="{{ i }}" {{'checked' if request.args.get('page')|int == i else ''}} id="a{{ i }}">
-        {% endif %}
-        <label for="a{{ i }}">{{ i + 1 }}</label>
-    </li>
-{% endfor %}
-</ul>
-
+</div>
 {% endblock %}
