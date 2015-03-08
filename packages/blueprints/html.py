@@ -195,10 +195,10 @@ def user(username):
 
 @html.route("/search")
 def search():
+    repos = request.args.getlist("repos")
     terms = request.args.get('terms')
     if not terms:
         terms = ''
-
     try:
         page = request.args.get('page')
         if not page:
@@ -219,6 +219,20 @@ def search():
         PAGE_SIZE = 10
 
     if PAGE_SIZE <= 0: PAGE_SIZE = 10
+
+    if "all" not in repos:
+        repoFilters = list()
+        if "core" in repos:
+            repoFilters.append(Package.repo == "core")
+        if "extra" in repos:
+            repoFilters.append(Package.repo == "extra")
+        if "community" in repos:
+            repoFilters.append(Package.repo == "community")
+        if "ports" in repos:
+            repoFilters.append(Package.repo == "ports")
+        if "nonfree" in repos:
+            repoFilters.append(Package.repo == "nonfree")
+        results = results.filter(or_(*repoFilters))
 
     for term in split_terms:
         filters.append(Package.repo.ilike('%' + term + '%'))

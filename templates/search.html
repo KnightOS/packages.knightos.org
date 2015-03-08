@@ -27,38 +27,25 @@
                     <option {{'selected' if request.args.get('count')|int==50 else ''}} value="50">50 Per Page</option>
                     <option {{'selected' if request.args.get('count')|int==100 else ''}} value="100">100 Per Page</option>
                 </select>
-                <div class="hidden">
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox" name="repos" value="all"> all
-                    </label>
-                </div>
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox" name="repos" value="core"> core
-                    </label>
-                </div>
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox" name="repos" value="extra"> extra
-                    </label>
-                </div>
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox" name="repos" value="community"> community
-                    </label>
-                </div>
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox" name="repos" value="ports"> ports
-                    </label>
-                </div>
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox" name="repos" value="nonfree"> nonfree
-                    </label>
-                </div>
-                </div>
+                {% set repos = request.args.getlist('repos') %}
+                <div class="checkbox"><label>
+                    <input form="searchForm" type="checkbox" name="repos" {{ 'checked' if not repos or "all" in repos else '' }} value="all"> all
+                </label></div>
+                <div class="checkbox"><label>
+                    <input form="searchForm" type="checkbox" name="repos" {{ 'checked' if not repos or "core" in repos else '' }}  value="core"> core
+                </label></div>
+                <div class="checkbox"><label>
+                    <input form="searchForm" type="checkbox" name="repos" {{ 'checked' if not repos or "extra" in repos else '' }} value="extra"> extra
+                </label></div>
+                <div class="checkbox"><label>
+                    <input form="searchForm" type="checkbox" name="repos" {{ 'checked' if not repos or"community" in repos else '' }} value="community"> community
+                </label></div>
+                <div class="checkbox"><label>
+                    <input form="searchForm" type="checkbox" name="repos" {{ 'checked' if not repos or "ports" in repos else '' }} value="ports"> ports
+                </label></div>
+                <div class="checkbox"><label>
+                    <input form="searchForm" type="checkbox" name="repos" {{ 'checked' if not repos or "nonfree" in repos else '' }} value="nonfree"> nonfree
+                </label></div>
             </div>
         </div>
         <div class="col-md-10">
