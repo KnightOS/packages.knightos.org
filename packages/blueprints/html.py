@@ -242,8 +242,13 @@ def search():
     results = results.filter(Package.approved == True)
     total = math.ceil(results.count() / PAGE_SIZE)
     pageCount = total
-    results = results.all()[page * PAGE_SIZE:(page + 1) * PAGE_SIZE]
-    return render_template("search.html", results=results, terms=terms, pageCount=pageCount)
+
+    pageResults = results.all()[page * PAGE_SIZE:(page + 1) * PAGE_SIZE]
+    if len(pageResults) == 0:
+        page = 0
+        pageResults = results.all()[page * PAGE_SIZE:(page + 1) * PAGE_SIZE]
+    results = pageResults
+    return render_template("search.html", results=results, terms=terms, pageCount=pageCount, page=page)
 
 @html.route("/<repo>/<name>/download")
 def download(repo, name):
