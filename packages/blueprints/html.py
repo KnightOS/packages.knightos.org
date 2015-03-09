@@ -248,10 +248,10 @@ def search():
     total = math.ceil(results.count() / PAGE_SIZE)
     pageCount = total
 
-    pageResults = results.all()[page * PAGE_SIZE:(page + 1) * PAGE_SIZE]
+    pageResults = results.order_by(desc(Package.updated)).all()[page * PAGE_SIZE:(page + 1) * PAGE_SIZE]
     if len(pageResults) == 0:
         page = 0
-        pageResults = results.all()[page * PAGE_SIZE:(page + 1) * PAGE_SIZE]
+        pageResults = results.order_by(desc(Package.updated)).all()[page * PAGE_SIZE:(page + 1) * PAGE_SIZE]
     results = pageResults
     return render_template("search.html", results=results, terms=terms, pageCount=pageCount, page=page)
 
