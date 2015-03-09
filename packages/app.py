@@ -42,7 +42,10 @@ login_manager.anonymous_user = lambda: None
 app.register_blueprint(api)
 app.register_blueprint(html)
 
-locale.setlocale(locale.LC_ALL, 'en_US')
+try:
+    locale.setlocale(locale.LC_ALL, 'en_US')
+except:
+    pass
 
 if not app.debug:
     @app.errorhandler(500)
