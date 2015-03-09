@@ -198,6 +198,7 @@ def upload_package():
         package.user = current_user
         package.name = info.name
         package.repo = info.repo
+        package.approved = False
     package.version = '{0}.{1}.{2}'.format(info.version[0], info.version[1], info.version[2])
     package.description = info.description
     package.author = info.author
@@ -217,7 +218,6 @@ def upload_package():
             print('appended ' + db_dep.name)
         except:
             return { 'success': False, 'error': '{0} is not a known dependency. Did you upload it first?'.format(dep) }, 400
-    package.approved = False
     storage_dir = os.path.join(_cfg("storage"), package.repo)
     if not os.path.exists(storage_dir):
         os.makedirs(storage_dir)
