@@ -1,6 +1,12 @@
 {% extends "layout.html" %}
+{% block scripts %}
+<script type="text/javascript">
+    $(".checkbox").change(function() {
+        document.getElementById("searchForm").submit();
+    });
+</script>
+{% endblock %}
 {% block body %}
-
 
 <div class="row">
     <div class="col-md-12">
