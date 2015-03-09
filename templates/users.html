@@ -52,10 +52,10 @@
 <ul class="page-radios">
 {% for i in range(pageCount) %}
     <li>
-        {% if not request.args.get('page') %}
+        {% if not page %}
         <input form="searchForm" onclick="searchForm.submit()" type=radio name="page" value="{{ i }}" {{'checked' if i==0 else ''}} id ="a{{ i }}">
         {% else %}
-        <input form="searchForm" onclick="searchForm.submit()" type=radio name="page" value="{{ i }}" {{'checked' if request.args.get('page')|int == i else ''}} id="a{{ i }}">
+        <input form="searchForm" onclick="searchForm.submit()" type=radio name="page" value="{{ i }}" {{'checked' if page == i else ''}} id="a{{ i }}">
         {% endif %}
         <label for="a{{ i }}">{{ i + 1 }}</label>
     </li>

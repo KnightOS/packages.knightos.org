@@ -182,8 +182,13 @@ def users():
     results = results.filter()
     total = math.ceil(results.count() / PAGE_SIZE)
     pageCount = total
-    results = results.order_by(desc(User.created)).all()[page * PAGE_SIZE:(page + 1) * PAGE_SIZE]
-    return render_template("users.html", results=results, terms=terms, pageCount=pageCount)
+
+    pageResults = results.order_by(desc(User.created)).all()[page * PAGE_SIZE:(page + 1) * PAGE_SIZE]
+    if len(pageResults) == 0:
+        page = 0
+        pageResults = results.order_by(desc(User.created)).all()[page * PAGE_SIZE:(page + 1) * PAGE_SIZE]
+    results = pageResults
+    return render_template("users.html", results=results, terms=terms, pageCount=pageCount, page=page)
 
 @html.route("/user/<username>")
 def user(username):
