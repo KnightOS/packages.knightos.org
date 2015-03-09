@@ -221,19 +221,18 @@ def search():
 
     if PAGE_SIZE <= 0: PAGE_SIZE = 10
 
-    if "all" not in repos:
-        repoFilters = list()
-        if "core" in repos:
-            repoFilters.append(Package.repo == "core")
-        if "extra" in repos:
-            repoFilters.append(Package.repo == "extra")
-        if "community" in repos:
-            repoFilters.append(Package.repo == "community")
-        if "ports" in repos:
-            repoFilters.append(Package.repo == "ports")
-        if "nonfree" in repos:
-            repoFilters.append(Package.repo == "nonfree")
-        results = results.filter(or_(*repoFilters))
+    repoFilters = list()
+    if "core" in repos:
+        repoFilters.append(Package.repo == "core")
+    if "extra" in repos:
+        repoFilters.append(Package.repo == "extra")
+    if "community" in repos:
+        repoFilters.append(Package.repo == "community")
+    if "ports" in repos:
+        repoFilters.append(Package.repo == "ports")
+    if "nonfree" in repos:
+        repoFilters.append(Package.repo == "nonfree")
+    results = results.filter(or_(*repoFilters))
 
     for term in split_terms:
         filters.append(Package.repo.ilike('%' + term + '%'))

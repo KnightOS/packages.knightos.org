@@ -29,9 +29,6 @@
                 </select>
                 {% set repos = request.args.getlist('repos') %}
                 <div class="checkbox"><label>
-                    <input form="searchForm" type="checkbox" name="repos" {{ 'checked' if not repos or "all" in repos else '' }} value="all"> all
-                </label></div>
-                <div class="checkbox"><label>
                     <input form="searchForm" type="checkbox" name="repos" {{ 'checked' if not repos or "core" in repos else '' }}  value="core"> core
                 </label></div>
                 <div class="checkbox"><label>
