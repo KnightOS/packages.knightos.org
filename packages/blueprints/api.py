@@ -179,7 +179,7 @@ def upload_package():
         info = PackageInfo.read_package(path)
         if info.repo == None or info.name == None or info.version == None:
             return { 'success': False, 'error': 'This is not a valid KnightOS package.' }, 400
-        if not info.repo in ['core', 'extra', 'community', 'ports']:
+        if not info.repo in ['core', 'extra', 'community', 'ports', 'nonfree']:
             return { 'success': False, 'error': '{0} is not an acceptable package repository.'.format(info.repo) }, 400
         if '/' in info.name:
             return { 'success': False, 'error': '{0} is not an acceptable package name.'.format(info.name) }, 400
