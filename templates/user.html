@@ -15,6 +15,8 @@
 {% block body %}
 <h2>{{ user_profile.username }}</h2>
 {% if current_user and current_user.admin %}
+    <button class="btn btn-primary btn-sm" style="margin:5px;" id="toggle-adminpanel-button">Admin Panel <span class="glyphicon glyphicon-chevron-down"></span></button>
+    <div id="adminpanel" hidden="hidden">
     {% if user_profile.confirmation != None %}
         <div class="alert alert-warning">
             <button class="btn btn-primary pull-right btn-sm" style="margin-top: -5px;" id="confirm-user-button">Confirm User</button>
@@ -40,7 +42,8 @@
             <button id="set-admin-button" hidden="hidden"></button>
             <p>This user is already an admin.</p>
         </div>
-     {% endif %}
+    {% endif %}
+    </div>
 {% endif %}
 <table class="table">
     <tbody>
