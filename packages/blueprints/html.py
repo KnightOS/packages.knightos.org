@@ -199,26 +199,8 @@ def user(username):
     return render_template("user.html", user_profile=user_profile, user_packages=user_packages)
 
 
-@html.route("/core")
-def repo_core():
-    return repo("core")
-
-@html.route("/extra")
-def repo_extra():
-    return repo("extra")
-
-@html.route("/community")
-def repo_community():
-    return repo("community")
-
-@html.route("/ports")
-def repo_ports():
-    return repo("ports")
-
-@html.route("/nonfree")
-def repo_nonfree():
-    return repo("nonfree")
-
+@html.route("/<repo>")
+@html.route("/<repo>/")
 def repo(repo):
 
     try:
@@ -249,6 +231,10 @@ def repo(repo):
         page = 0
         pageResults = results.order_by(desc(Package.updated)).all()[page * PAGE_SIZE:(page + 1) * PAGE_SIZE]
     results = pageResults
+
+    if len(results) == 0:
+        abort(404)
+
     return render_template("repo.html", results=results, pageCount=pageCount, page=page, repo=repo)
 
 @html.route("/search")
