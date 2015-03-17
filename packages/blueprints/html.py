@@ -199,6 +199,58 @@ def user(username):
     return render_template("user.html", user_profile=user_profile, user_packages=user_packages)
 
 
+@html.route("/core")
+def repo_core():
+    return repo("core")
+
+@html.route("/extra")
+def repo_extra():
+    return repo("extra")
+
+@html.route("/community")
+def repo_community():
+    return repo("community")
+
+@html.route("/ports")
+def repo_ports():
+    return repo("ports")
+
+@html.route("/nonfree")
+def repo_nonfree():
+    return repo("nonfree")
+
+def repo(repo):
+
+    try:
+        page = request.args.get('page')
+        if not page:
+            page = '0'
+        page = int(page)
+    except:
+        abort(400)
+
+    try:
+        PAGE_SIZE = request.args.get('count')
+        if not PAGE_SIZE:
+            PAGE_SIZE = '10'
+        PAGE_SIZE = int(PAGE_SIZE)
+    except:
+        PAGE_SIZE = 10
+
+    if PAGE_SIZE <= 0: PAGE_SIZE = 10
+
+    results = Package.query.filter(Package.repo == repo and Package.approved == True)
+
+    total = math.ceil(results.count() / PAGE_SIZE)
+    pageCount = total
+
+    pageResults = results.order_by(desc(Package.updated)).all()[page * PAGE_SIZE:(page + 1) * PAGE_SIZE]
+    if len(pageResults) == 0:
+        page = 0
+        pageResults = results.order_by(desc(Package.updated)).all()[page * PAGE_SIZE:(page + 1) * PAGE_SIZE]
+    results = pageResults
+    return render_template("repo.html", results=results, pageCount=pageCount, page=page, repo=repo)
+
 @html.route("/search")
 def search():
     repos = request.args.getlist("repos")

@@ -1,0 +1,69 @@
+{% extends "layout.html" %}
+{% block scripts %}
+<script type="text/javascript">
+    $(".form-control").change(function() {
+        document.getElementById("searchForm").submit();
+    });
+</script>
+{% endblock %}
+{% block body %}
+
+<div class="row">
+    <div class="col-md-12">
+        <form id="searchForm" role="search" method="GET" action="/{{ repo }}" class="row">
+            <div class="col-md-2">
+            </div>
+            <div class="col-md-8">
+            </div>
+            <div class="col-md-2">
+            </div>
+        </form>
+    </div>
+
+    <div class="row" style="margin-top:10px;">
+        <div class="col-md-2">
+            <div class="well well-sm">
+                <select name="count" class="form-control" form="searchForm" value="{{ count }}" style="margin-left: 0px;">
+                    <option {{'selected' if request.args.get('count')|int==10 else ''}} value="10">10 Per Page</option>
+                    <option {{'selected' if request.args.get('count')|int==25 else ''}} value="25">25 Per Page</option>
+                    <option {{'selected' if request.args.get('count')|int==50 else ''}} value="50">50 Per Page</option>
+                    <option {{'selected' if request.args.get('count')|int==100 else ''}} value="100">100 Per Page</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-10">
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <th>Repository/Name</th>
+                        <th>Version</th>
+                        <th>Description</th>
+                        <th>Last Updated</th>
+                    </tr>
+                    {% for result in results %}
+                    <tr>
+                        <td class="col-md-3"><a href="/{{ result.repo }}/{{ result.name }}">{{ result.repo }}/{{ result.name }}</a></td>
+                        <td class="col-md-1">{{ result.version }}</td>
+                        <td class="col-md-6">{{ result.description }}</td>
+                        <td>{{ result.updated.strftime('%B %d, %Y')  }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <ul class="page-radios">
+            {% for i in range(pageCount) %}
+                <li>
+                {% if not page %}
+                    <input form="searchForm" onclick="searchForm.submit()" type=radio name="page" value="{{ i }}" {{'checked' if i==0 else ''}} id ="a{{ i }}">
+                {% else %}
+                    <input form="searchForm" onclick="searchForm.submit()" type=radio name="page" value="{{ i }}" {{'checked' if page == i else ''}} id="a{{ i }}">
+                {% endif %}
+                <label for="a{{ i }}">{{ i + 1 }}</label>
+               </li>
+            {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
