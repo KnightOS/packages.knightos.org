@@ -206,6 +206,7 @@ def upload_package():
     package.infourl = info.infourl
     package.copyright = info.copyright
     package.capabilities = ' '.join(info.capabilities)
+    package.contents = None
     package.dependencies = list()
     for dep in info.dependencies:
         try:
