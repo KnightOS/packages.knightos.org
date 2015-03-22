@@ -140,7 +140,9 @@ def package(repo, name):
         packageDict = PackageInfo.get_package_contents(packagePath)
         p.contents = json.dumps(packageDict)
         db.commit()
-    packageContents = json.loads(p.contents) 
+    packageContents = json.loads(p.contents)
+    if p.downloads == None:
+        p.downloads = 0
     return render_template("package.html", package=p, packageContents = packageContents)
 
 
@@ -298,6 +300,10 @@ def download(repo, name):
     p = Package.query.filter(Package.name == name and Package.repo == repo).first()
     if not p:
         abort(404)
+    if p.downloads == None:
+        p.downloads = 0
+    p.downloads += 1
+    db.commit()
     return send_file(os.path.join(_cfg("storage"), p.repo, "{0}-{1}.pkg".format(p.name, p.version)), as_attachment=True)
 
 @html.route("/guidelines")

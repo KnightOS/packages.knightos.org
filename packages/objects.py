@@ -57,6 +57,8 @@ class Package(Base):
     user = relationship('User', backref=backref('package', order_by=id))
     approved = Column(Boolean)
     contents = Column(Unicode(2048))
+    pkgrel = Column(Integer)
+    downloads = Column(Integer)
     # From package metadata
     name = Column(String(128), nullable = False)
     repo = Column(String(128), nullable = False)

@@ -157,6 +157,10 @@ document.getElementById("transfer-button").addEventListener('click', function(e)
             <td><a href="{{ package.infourl }}">{{ package.infourl }}</a></td>
         </tr>
         {% endif %}
+        <tr>
+            <th>Downloads</th>
+            <td>{{ package.downloads }} </td>
+        </tr>
     </tbody>
 </table>
 
