@@ -26,6 +26,22 @@ def send_confirmation(user):
     smtp.sendmail("packages@knightos.org", [ user.email ], message.as_string())
     smtp.quit()
 
+def send_confirmation(user):
+    if _cfg("smtp-host") == "":
+        return
+    smtp = smtplib.SMTP(_cfg("smtp-host"), _cfgi("smtp-port"))
+    smtp.login(_cfg("smtp-user"), _cfg("smtp-password"))
+    with open("emails/password-reset") as f:
+        message = MIMEText(html.parser.HTMLParser().unescape(\
+            pystache.render(f.read(), { 'user': user, "domain": _cfg("domain"), 'confirmation': user.passwordReset })))
+    message['X-MC-Important'] = "true"
+    message['X-MC-PreserveRecipients'] = "false"
+    message['Subject'] = "Reset your password for the KnightOS Package Index"
+    message['From'] = "packages@knightos.org"
+    message['To'] = user.email
+    smtp.sendmail("packages@knightos.org", [ user.email ], message.as_string())
+    smtp.quit()
+
 def send_new_pacakge_email(package):
     if _cfg("smtp-host") == "":
         return
