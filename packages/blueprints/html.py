@@ -113,8 +113,7 @@ def logout():
     logout_user()
     return redirect("/")
 
-@accounts.route("/forgot-password", methods=['GET', 'POST'])
-@with_session
+@html.route("/forgot-password", methods=['GET', 'POST'])
 def forgot_password():
     if request.method == 'GET':
         return render_template("forgot.html")
@@ -131,9 +130,8 @@ def forgot_password():
         send_reset(user)
         return render_template("forgot.html", success=True)
 
-@accounts.route("/reset", methods=['GET', 'POST'])
-@accounts.route("/reset/<username>/<confirmation>", methods=['GET', 'POST'])
-@with_session
+@html.route("/reset", methods=['GET', 'POST'])
+@html.route("/reset/<username>/<confirmation>", methods=['GET', 'POST'])
 def reset_password(username, confirmation):
     user = User.query.filter(User.username == username).first()
     if not user:
