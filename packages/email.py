@@ -26,7 +26,7 @@ def send_confirmation(user):
     smtp.sendmail("packages@knightos.org", [ user.email ], message.as_string())
     smtp.quit()
 
-def send_confirmation(user):
+def send_reset(user):
     if _cfg("smtp-host") == "":
         return
     smtp = smtplib.SMTP(_cfg("smtp-host"), _cfgi("smtp-port"))
