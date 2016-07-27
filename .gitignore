@@ -9,3 +9,6 @@ static/
 *.swp
 *.rdb
 storage/
+.Python
+pip-selfcheck.json
+node_modules/
