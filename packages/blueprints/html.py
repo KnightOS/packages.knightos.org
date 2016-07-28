@@ -27,7 +27,7 @@ def index():
     recent = Package.query.filter(Package.approved == True).order_by(desc(Package.updated)).limit(10).all()
     recent_users = User.query.filter(User.confirmation == None).order_by(desc(User.created)).limit(10).all()
     queue = Package.query.filter(Package.approved == False).order_by(desc(Package.updated)).all()
-    total = Package.query.count()
+    total = Package.query.filter(Package.approved == True).count()
     return render_template("index.html", recent=recent, recent_users=recent_users, queue=queue, total=total)
 
 @html.route("/register", methods=['GET', 'POST'])
