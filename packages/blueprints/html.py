@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, abort, request, redirect, session, url_for, send_file
 from flask.ext.login import current_user, login_user, logout_user
-from sqlalchemy import desc, or_, and_, desc
+from sqlalchemy import desc, or_, and_, asc
 from packages.objects import *
 from packages.common import *
 from packages.config import _cfg
@@ -325,7 +325,17 @@ def search():
     if "nonfree" in repos:
         repoFilters.append(Package.repo == "nonfree")
     results = results.filter(or_(*repoFilters))
+ 
+    order = request.args.get('order')
+    order_fn = asc if order == 'asc' else desc
 
+    order_by = []
+    sort = request.args.get('sort')
+    if sort == 'name':
+        order_by = [order_fn(Package.repo), order_fn(Package.name)]
+    else:
+        order_by = [order_fn(Package.updated), desc(Package.name)]
+    
     for term in split_terms:
         filters.append(Package.repo.ilike('%' + term + '%'))
         filters.append(Package.name.ilike('%' + term + '%'))
@@ -335,10 +345,10 @@ def search():
     total = math.ceil(results.count() / PAGE_SIZE)
     pageCount = total
 
-    pageResults = results.order_by(desc(Package.updated)).all()[page * PAGE_SIZE:(page + 1) * PAGE_SIZE]
+    pageResults = results.order_by(order_by[0]).order_by(order_by[1]).all()[page * PAGE_SIZE:(page + 1) * PAGE_SIZE]
     if len(pageResults) == 0:
         page = 0
-        pageResults = results.order_by(desc(Package.updated)).all()[page * PAGE_SIZE:(page + 1) * PAGE_SIZE]
+        pageResults = results.order_by(order_by[0]).order_by(order_by[1]).all()[page * PAGE_SIZE:(page + 1) * PAGE_SIZE]
     results = pageResults
     return render_template("search.html", results=results, terms=terms, pageCount=pageCount, page=page)
 
