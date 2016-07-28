@@ -4,6 +4,37 @@
     $(".checkbox").change(function() {
         document.getElementById("searchForm").submit();
     });
+
+    $.fn.sortableCtrl = function(attr) {
+        var initialSort = "{{ request.args.get('sort') }}";
+        var initialOrder = "{{ request.args.get('order') }}";
+        var initialClass = "glyphicon-chevron-down";
+        
+        $("#sort-order").val(initialOrder);
+        $("#sort-key").val(initialSort);
+
+        if(attr == initialSort && initialOrder == "asc") {
+            initialClass = "glyphicon-chevron-up";
+        }
+        this.addClass(initialClass);
+
+        return this.click(function(ev) {
+            var ctrl = $(ev.toElement).toggleClass("glyphicon-chevron-down glyphicon-chevron-up");
+            var order = "desc";
+				
+            if(ctrl.hasClass("glyphicon-chevron-up")) {
+                order = "asc";
+            }
+
+            $("#sort-order").val(order);
+            $("#sort-key").val(attr);
+
+            document.getElementById("searchForm").submit();
+        });
+    };
+
+    $("#sort-by-updated").sortableCtrl("updated");
+    $("#sort-by-name").sortableCtrl("name");
 </script>
 {% endblock %}
 {% block body %}
@@ -11,6 +42,9 @@
 <div class="row">
     <div class="col-md-12">
         <form id="searchForm" role="search" method="GET" action="/search" class="row">
+            <input type="hidden" name="order" value="desc" id="sort-order">
+            <input type="hidden" name="sort" value="updated" id="sort-key">
+
             <div class="col-md-2">
             </div>
             <div class="col-md-8">
@@ -55,10 +89,10 @@
             <table class="table">
                 <tbody>
                     <tr>
-                        <th>Repository/Name</th>
+                        <th>Repository/Name <span class="sortable-ctrl glyphicon" id="sort-by-name"></span></th>
                         <th>Version</th>
                         <th>Description</th>
-                        <th>Last Updated</th>
+                        <th>Last Updated <span class="sortable-ctrl glyphicon" id="sort-by-updated"></span></th>
                     </tr>
                     {% for result in results %}
                     <tr>
